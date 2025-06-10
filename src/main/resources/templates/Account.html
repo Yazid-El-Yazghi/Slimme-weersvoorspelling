@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <!-- Navigatiebar -->
+    <nav class="navbar">
+        <div class="navbar-logo">
+            <img src="Images/Logo_Aquafin.png" alt="Bedrijfslogo" class="company-logo">
+        </div>
+        <div class="navbar-right">
+            <a href="#" class="nav-link nav-btn admin-action">Alert Beheer</a>
+            <a href="#" class="nav-link nav-btn admin-action">User Beheer</a>
+            <a href="#" class="nav-link nav-btn">Logout</a>
+        </div>
+    </nav>
+
+    <main>
+        <h1 class="welcome-title">
+            Accountbeheer
+        </h1>
+        <div class="admin-info">
+            Hier kan je je wachtwoord en e-mailadres aanpassen.
+        </div>
+        <div class="chart-container" style="max-width: 500px;">
+            <form class="edit-data-form" style="margin-bottom:2.5rem;">
+                <div class="edit-form-title">Wachtwoord wijzigen</div>
+                <label>
+                    Huidig wachtwoord:
+                    <input type="password" class="user-input" name="current-password" required>
+                </label>
+                <label>
+                    Nieuw wachtwoord:
+                    <input type="password" class="user-input" name="new-password" required>
+                </label>
+                <label>
+                    Herhaal nieuw wachtwoord:
+                    <input type="password" class="user-input" name="repeat-password" required>
+                </label>
+                <div style="text-align:center; margin-top:2em;">
+                    <button type="submit" class="save-btn">Wachtwoord wijzigen</button>
+                </div>
+            </form>
+            <form class="edit-data-form">
+                <div class="edit-form-title">E-mail wijzigen</div>
+                <label>
+                    Nieuw e-mailadres:
+                    <input type="email" class="user-input" name="new-email" required>
+                </label>
+                <div class="admin-info" style="margin-bottom:1em;">
+                    Er wordt een bevestigingsmail gestuurd naar je nieuwe e-mailadres.
+                </div>
+                <div style="text-align:center; margin-top:1.5em;">
+                    <button type="submit" class="save-btn">E-mail wijzigen</button>
+                </div>
+            </form>
+        </div>
+    </main>
+</body>
+</html>

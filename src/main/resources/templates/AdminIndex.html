@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <!-- Navigatiebar -->
+    <nav class="navbar">
+        <div class="navbar-logo">
+            <img src="Images/Logo_Aquafin.png" alt="Bedrijfslogo" class="company-logo">
+        </div>
+        <div class="navbar-right">
+            <a href="#" class="nav-link nav-btn admin-action">Alert Beheer</a>
+            <a href="#" class="nav-link nav-btn admin-action">User Beheer</a>
+            <a href="#" class="nav-link nav-btn">Account</a>
+            <a href="#" class="nav-link nav-btn">Logout</a>
+        </div>
+    </nav>
+
+    <!-- Welkomsttitel -->
+    <main>
+        <h1 class="welcome-title">
+            Welcome, <span id="colleague-name">Gwen Temperman</span>
+            <span class="admin-badge">Admin</span>
+        </h1>
+
+        <!-- Jaarselectie -->
+        <div class="chart-title-style" style="margin-bottom:1rem;">
+            Neerslag per maand in Vlaanderen (<span id="selected-year">2024</span>)
+        </div>
+        <div class="year-select-container">
+            <label for="year-select" class="year-select-label">Kies jaar:</label>
+            <select id="year-select" class="year-select">
+                <!-- Opties worden via JS gevuld -->
+            </select>
+        </div>
+
+        <!-- Staafdiagram -->
+        <div class="chart-container">
+            <canvas id="rainChart" width="800" height="400"></canvas>
+            <div id="season-warnings" class="flood-warnings"></div>
+        </div>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Data per jaar
+        const years = [
+            2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,
+            2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025
+        ];
+        const months = [
+            "Januari", "Februari", "Maart", "April", "Mei",
+            "Juni", "Juli", "Augustus", "September", "Oktober", "November", "December"
+        ];
+        const allData = [
+            [67,54,73,68,74,79,98,89,68,98,98,108],
+            [66,45,61,57,70,82,85,78,77,94,100,103],
+            [62,56,64,62,72,79,87,94,70,90,104,104],
+            [66,45,63,61,79,81,89,83,63,91,98,115],
+            [67,46,72,58,72,83,95,90,66,93,102,115],
+            [63,54,64,54,79,87,90,90,72,92,102,118],
+            [65,63,57,64,75,79,90,75,69,97,107,107],
+            [61,52,75,62,72,83,90,90,66,93,98,103],
+            [66,56,70,59,68,78,88,81,69,97,109,111],
+            [66,55,60,60,75,92,89,87,70,89,106,114],
+            [69,50,77,53,78,91,85,82,70,92,92,110],
+            [60,57,65,68,71,78,94,79,71,102,92,111],
+            [66,59,64,53,78,81,91,87,67,96,101,106],
+            [74,57,64,63,70,84,96,81,75,97,104,119],
+            [64,51,66,56,75,82,91,89,70,102,99,124],
+            [68,51,65,62,74,84,92,85,66,87,98,114],
+            [66,49,71,62,71,81,90,79,72,98,105,115],
+            [58,50,73,63,78,99,93,91,75,98,98,114],
+            [61,54,68,60,87,71,93,77,68,100,100,105],
+            [61,58,66,61,75,77,101,88,60,96,97,114]
+            // Geen data voor 2025 in deze array!
+        ];
+
+        // Vul dropdown
+        const yearSelect = document.getElementById('year-select');
+        years.forEach((year, idx) => {
+            const opt = document.createElement('option');
+            opt.value = idx;
+            opt.textContent = year;
+            if (year === 2024) opt.selected = true;
+            yearSelect.appendChild(opt);
+        });
+
+        // Chart.js setup
+        let rainChart = null;
+        // Seizoenen mapping + drempels
+        const seasons = [
+            { name: "Winter", months: [11, 0, 1], threshold: 300 }, // Dec, Jan, Feb
+            { name: "Lente", months: [2, 3, 4], threshold: 250 },   // Mrt, Apr, Mei
+            { name: "Zomer", months: [5, 6, 7], threshold: 260 },   // Jun, Jul, Aug
+            { name: "Herfst", months: [8, 9, 10], threshold: 280 }  // Sep, Okt, Nov
+        ];
+
+        // Data cache voor 2025
+        let data2025 = null;
+        let loading2025 = false;
+
+        function renderChart(yearIdx) {
+            let data;
+            if (years[yearIdx] === 2025) {
+                if (data2025 === null) {
+                    // Toon laadstatus
+                    const ctx = document.getElementById('rainChart').getContext('2d');
+                    ctx.clearRect(0, 0, 800, 400);
+                    document.getElementById('season-warnings').innerHTML = '<div>Bezig met laden van data voor 2025...</div>';
+                    if (!loading2025) {
+                        loading2025 = true;
+                        fetchFlandersRain2025().then(totals => {
+                            data2025 = totals;
+                            loading2025 = false;
+                            renderChart(yearIdx);
+                        });
+                    }
+                    return;
+                } else {
+                    data = data2025;
+                }
+            } else {
+                data = allData[yearIdx];
+            }
+            const bgColors = data.map(val => '#4BB8F4');
+            const ctx = document.getElementById('rainChart').getContext('2d');
+            if (rainChart) rainChart.destroy();
+            rainChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: months,
+                    datasets: [{
+                        label: 'Neerslag (mm)',
+                        data: data,
+                        backgroundColor: bgColors,
+                        borderRadius: 8,
+                        borderSkipped: false,
+                        maxBarThickness: 60
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 150,
+                            title: {
+                                display: true,
+                                text: 'Neerslag (mm)'
+                            },
+                            ticks: {
+                                stepSize: 10
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false }
+                    }
+                }
+            });
+
+            // Seizoenswaarschuwingen: som per seizoen >= drempel
+            const warningsDiv = document.getElementById('season-warnings');
+            warningsDiv.innerHTML = '';
+            seasons.forEach(season => {
+                const sum = season.months.reduce((acc, idx) => acc + (data[idx] || 0), 0);
+                if (sum >= season.threshold) {
+                    const warning = document.createElement('div');
+                    warning.className = 'flood-warning-label';
+                    warning.innerHTML = `<span class="flood-icon">⚠️</span> Gevaar voor overstroming in <b>${season.name}</b> (totaal: ${sum} mm, drempel: ${season.threshold} mm)`;
+                    warningsDiv.appendChild(warning);
+                }
+            });
+
+            // Update titel
+            document.getElementById('selected-year').textContent = years[yearIdx];
+        }
+
+        // Init
+        renderChart(years.length - 2); // 2024 als default
+
+        // Event
+        yearSelect.onchange = function() {
+            renderChart(Number(this.value));
+        };
+
+        // Function to get 2025 rainfall data as average across Flanders
+        async function fetchFlandersRain2025() {
+            console.log("Bezig met ophalen van neerslaggegevens voor Vlaanderen 2025...");
+            
+            const currentDate = new Date();
+            const currentMonth = currentDate.getMonth(); // 0-11 voor Jan-Dec
+            
+            // BBOX voor heel Vlaanderen (EPSG:4326)
+            const bbox = "2.5,50.7,5.9,51.5";
+            const averages = [];
+            
+            // Ophalen van gegevens per maand
+            for (let month = 0; month < 12; month++) {
+                try {
+                    const year = 2025;
+                    // Begin- en einddatum van de maand
+                    const startDate = new Date(year, month, 1);
+                    // Laatste dag van de maand
+                    const endDate = new Date(year, month + 1, 0);
+                    
+                    const startStr = startDate.toISOString().slice(0, 10) + "T00:00:00Z";
+                    const endStr = endDate.toISOString().slice(0, 10) + "T23:59:59Z";
+                    
+                    // CQL filter voor Vlaanderen bbox en tijdsperiode
+                    const cqlFilter = `BBOX(the_geom,${bbox.split(',')[0]},${bbox.split(',')[1]},${bbox.split(',')[2]},${bbox.split(',')[3]}) AND timestamp DURING ${startStr}/${endStr}`;
+                    
+                    const url = `https://opendata.meteo.be/service/ows?service=wfs&version=2.0.0&request=getFeature&typeNames=synop:synop_data&outputformat=json&CQL_FILTER=${encodeURIComponent(cqlFilter)}`;
+                    
+                    const response = await fetch(url);
+                    const data = await response.json();
+                    
+                    // Berekenen van totale neerslag over alle stations in Vlaanderen
+                    let totalPrecip = 0;
+                    let stationCount = 0;
+                    
+                    if (data.features && data.features.length > 0) {
+                        // Groepeer per station om dubbele registraties te voorkomen
+                        const stationData = {};
+                        
+                        data.features.forEach(feature => {
+                            if (feature.properties && feature.properties.code && 
+                                feature.properties.precip_quantity !== undefined && 
+                                feature.properties.precip_quantity !== null) {
+                                const stationCode = feature.properties.code;
+                                if (!stationData[stationCode]) {
+                                    stationData[stationCode] = 0;
+                                }
+                                stationData[stationCode] += feature.properties.precip_quantity;
+                            }
+                        });
+                        
+                        // Bereken gemiddelde per station
+                        for (const station in stationData) {
+                            totalPrecip += stationData[station];
+                            stationCount++;
+                        }
+                        
+                        if (stationCount > 0) {
+                            const avgPrecip = Math.round(totalPrecip / stationCount);
+                            averages.push(avgPrecip);
+                            console.log(`Maand ${month+1}: Gemiddelde neerslag ${avgPrecip}mm van ${stationCount} stations`);
+                        } else {
+                            // Geen bruikbare metingen gevonden, gebruik 0
+                            console.log(`Maand ${month+1}: Geen bruikbare metingen gevonden`);
+                            averages.push(0);
+                        }
+                    } else {
+                        // Geen data gevonden in API response
+                        console.log(`Maand ${month+1}: Geen data in API response`);
+                        averages.push(0);
+                    }
+                } catch (error) {
+                    console.error(`Fout bij ophalen data voor maand ${month+1}:`, error);
+                    // Bij fout, gebruik 0
+                    averages.push(0);
+                }
+            }
+
+            console.log("Neerslaggegevens voor Vlaanderen 2025:", averages);
+            return averages;
+        }
+    </script>
+</body>
+</html>

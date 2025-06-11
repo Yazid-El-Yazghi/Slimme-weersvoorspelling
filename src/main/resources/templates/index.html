@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="${#locale.language}" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,8 +14,9 @@
             <img src="Images/Logo_Aquafin.png" alt="Bedrijfslogo" class="company-logo">
         </div>
         <div class="navbar-right">
-            <a href="#" class="nav-link nav-btn">Account</a>
+            <a href="/account" class="nav-link nav-btn">Account</a>
             <a href="#" class="nav-link nav-btn">Logout</a>
+            <a href="/weer"  class="nav-link nav-btn">Voorspelling</a>
         </div>
     </nav>
 

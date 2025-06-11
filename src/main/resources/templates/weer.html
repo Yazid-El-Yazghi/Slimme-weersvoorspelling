@@ -1,10 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="${#locale.language}" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" th:href="style.css">
 </head>
 <body>
-<h1>Hello</h1>
+    <!-- Navigatiebar -->
+    <nav class="navbar">
+        <div class="navbar-logo">
+            <img src="/Images/Logo_Aquafin.png" alt="Bedrijfslogo" class="company-logo">
+        </div>
+        <div class="navbar-right">
+            <a href="/account" class="nav-link nav-btn">Account</a>
+            <a href="/admin" class="nav-link nav-btn">Logout</a>
+        </div>
+    </nav>
+
+    <h1>Dit is momenteel leeg, dit wordt de pagina voor de weervoorspelling</h1>
+    <a href="/index">kkc,fk,fk</a>
 </body>
 </html>

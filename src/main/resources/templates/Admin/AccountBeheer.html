@@ -1,21 +1,21 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="${#locale.language}" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Beheer</title>
-    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" th:href="style.css">
 </head>
 <body>
     <!-- Navigatiebar -->
     <nav class="navbar">
         <div class="navbar-logo">
-            <img src="Images/Logo_Aquafin.png" alt="Bedrijfslogo" class="company-logo">
+            <!---<img src="/Images/Logo_Aquafin.png" alt="Bedrijfslogo" class="company-logo">-->
         </div>
         <div class="navbar-right">
-            <a href="#" class="nav-link nav-btn admin-action">Alert Beheer</a>
-            <a href="#" class="nav-link nav-btn">Account</a>
-            <a href="#" class="nav-link nav-btn">Logout</a>
+            <a href="/alerts" class="nav-link nav-btn admin-action">Alert Beheer</a>
+            <a href="/account" class="nav-link nav-btn">Account</a>
+            <a href="/admin" class="nav-link nav-btn">Logout</a>
         </div>
     </nav>
 
@@ -29,7 +29,7 @@
 
         <div class="chart-container" style="max-width: 900px;">
             <div style="text-align:right; margin-bottom:1.5rem;">
-                <button class="save-btn" style="background:#4BB8F4;" id="add-user-btn">+ Nieuwe gebruiker</button>
+                <a href="/new-account" class="save-btn" style="background:#4BB8F4; text-decoration:none;">+ Nieuwe gebruiker</a>
             </div>
             <table class="user-table">
                 <thead>

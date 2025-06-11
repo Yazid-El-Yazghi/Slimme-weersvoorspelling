@@ -16,7 +16,125 @@
         </div>
     </nav>
 
-    <h1>Dit is momenteel leeg, dit wordt de pagina voor de weervoorspelling</h1>
+    <h1>Weervoorspelling voor de komende dagen</h1>
 
+    <!-- Gemeente selectie -->
+    <div class="year-select-container">
+        <label for="gemeente-select" class="year-select-label">Kies gemeente:</label>
+        <select id="gemeente-select" class="year-select">
+            <option value="51.2194,4.4025">Antwerpen</option>
+            <option value="51.0536,3.7304">Gent</option>
+            <option value="51.2093,3.2247">Brugge</option>
+            <option value="50.8798,4.7005">Leuven</option>
+            <option value="51.0257,4.4776">Mechelen</option>
+            <option value="50.9307,5.3378">Hasselt</option>
+            <option value="50.8266,3.2649">Kortrijk</option>
+            <option value="51.2300,2.9126">Oostende</option>
+            <option value="50.9360,4.0355">Aalst</option>
+            <option value="51.1651,4.1431">Sint-Niklaas</option>
+        </select>
+    </div>
+
+    <!-- Grafiek container -->
+    <div class="chart-container">
+        <canvas id="forecastChart" width="800" height="400"></canvas>
+        <div id="api-season-warnings" class="flood-warnings"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Seizoenen mapping + drempels
+        const seasons = [
+            { name: "Winter", months: [11, 0, 1], threshold: 300 }, // Dec, Jan, Feb
+            { name: "Lente", months: [2, 3, 4], threshold: 250 },   // Mrt, Apr, Mei
+            { name: "Zomer", months: [5, 6, 7], threshold: 260 },   // Jun, Jul, Aug
+            { name: "Herfst", months: [8, 9, 10], threshold: 280 }  // Sep, Okt, Nov
+        ];
+
+        let forecastChart = null;
+
+        function fetchAndRenderForecast(lat, lon) {
+            const apiUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=precipitation_sum,precipitation_probability_max&timezone=Europe%2FBerlin`;
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => {
+                    const days = data.daily.time;
+                    const precipitation = data.daily.precipitation_sum;
+                    const probability = data.daily.precipitation_probability_max;
+
+                    // Chart.js grafiek
+                    const ctx = document.getElementById('forecastChart').getContext('2d');
+                    if (forecastChart) forecastChart.destroy();
+                    forecastChart = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: days,
+                            datasets: [
+                                {
+                                    label: 'Neerslag (mm)',
+                                    data: precipitation,
+                                    backgroundColor: '#4BB8F4'
+                                },
+                                {
+                                    label: 'Kans op neerslag (%)',
+                                    data: probability,
+                                    type: 'line',
+                                    borderColor: '#1976d2',
+                                    backgroundColor: 'rgba(25,118,210,0.1)',
+                                    yAxisID: 'y1'
+                                }
+                            ]
+                        },
+                        options: {
+                            responsive: true,
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    title: { display: true, text: 'Neerslag (mm)' }
+                                },
+                                y1: {
+                                    beginAtZero: true,
+                                    position: 'right',
+                                    title: { display: true, text: 'Kans op neerslag (%)' },
+                                    grid: { drawOnChartArea: false }
+                                }
+                            }
+                        }
+                    });
+
+                    // Automatische waarschuwing bij overschrijding seizoensdrempel
+                    const warningsDiv = document.getElementById('api-season-warnings');
+                    warningsDiv.innerHTML = '';
+                    const dailyData = data.daily.precipitation_sum;
+                    const dailyDates = data.daily.time.map(d => new Date(d));
+                    let monthsData = Array(12).fill(0);
+                    dailyDates.forEach((date, i) => {
+                        const m = date.getMonth();
+                        monthsData[m] += dailyData[i];
+                    });
+                    seasons.forEach(season => {
+                        const sum = season.months.reduce((acc, idx) => acc + (monthsData[idx] || 0), 0);
+                        if (sum >= season.threshold) {
+                            const warning = document.createElement('div');
+                            warning.className = 'flood-warning-label';
+                            warning.innerHTML = `<span class="flood-icon">⚠️</span> Gevaar voor overstroming in <b>${season.name}</b> (totaal: ${sum.toFixed(1)} mm, drempel: ${season.threshold} mm)`;
+                            warningsDiv.appendChild(warning);
+                        }
+                    });
+                })
+                .catch(err => {
+                    document.getElementById('forecastChart').replaceWith("Kon geen weerdata laden.");
+                });
+        }
+
+        // Init: standaard Antwerpen
+        fetchAndRenderForecast(51.2194, 4.4025);
+
+        // Event listener voor gemeente-selectie
+        document.getElementById('gemeente-select').addEventListener('change', function() {
+            const [lat, lon] = this.value.split(',');
+            fetchAndRenderForecast(lat, lon);
+        });
+    </script>
 </body>
 </html>

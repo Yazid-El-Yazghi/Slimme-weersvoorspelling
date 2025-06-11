@@ -1,27 +1,27 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="${#locale.language}" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
-    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" th:href="style.css">
 </head>
 <body>
     <!-- Navigatiebar -->
     <nav class="navbar">
         <div class="navbar-logo">
-            <img src="Images/Logo_Aquafin.png" alt="Bedrijfslogo" class="company-logo">
+            <a href="/"><img src="/Images/Logo_Aquafin.png" alt="Bedrijfslogo" class="company-logo"></a>
         </div>
         <div class="navbar-right">
-            <a href="#" class="nav-link nav-btn">Account</a>
-            <a href="#" class="nav-link nav-btn">Logout</a>
+            <a href="/weer" class="nav-link nav-btn">Weer voorspelling</a>
         </div>
     </nav>
 
     <!-- Welkomsttitel -->
     <main>
         <h1 class="welcome-title">
-            Welcome, <span id="colleague-name">Gwen Temperman</span>
+            Welcome, <span id="colleague-name">Gebruiker</span>
         </h1>
 
         <!-- Jaarselectie -->
@@ -52,6 +52,7 @@
             "Januari", "Februari", "Maart", "April", "Mei",
             "Juni", "Juli", "Augustus", "September", "Oktober", "November", "December"
         ];
+        //data van aquafin
         const allData = [
             [67,54,73,68,74,79,98,89,68,98,98,108],
             [66,45,61,57,70,82,85,78,77,94,100,103],

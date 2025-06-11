@@ -1,38 +1,20 @@
 package be.ehb.slimmeweervoospelling.Controllers;
-
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class WebsiteController {
-
     @GetMapping("/")
-    public String home() {
-        return "index"; // laadt index.html vanuit templates
+    public String weer() {
+        return "weer"; // toont de voorspellingen
     }
 
-    @GetMapping("/admin")
-    public String adminDashboard() {
-        return "AdminIndex"; // laadt AdminIndex.html
+    @GetMapping("/index")
+    public String index() {
+        return "index"; // laadt index.html
     }
 
-    @GetMapping("/alerts")
-    public String alertsBeheer() {
-        return "AlertsBeheer";
-    }
-
-    @GetMapping("/users")
-    public String userBeheer() {
-        return "AccountBeheer";
-    }
-
-    @GetMapping("/account")
-    public String account() {
-        return "Account";
-    }
-
-    @GetMapping("/new-account")
-    public String newAccount() {
-        return "NieuwAccount";
+    @GetMapping("/weer")
+    public String weerPage() {
+        return "weer"; // maakt /weer ook geldig
     }
 }

@@ -4,8 +4,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import java.time.LocalDate;
-import java.time.YearMonth;
+
 import java.util.*;
 import be.ehb.slimmeweervoospelling.model.APi;
 
@@ -16,9 +15,9 @@ public class WebsiteController {
         return "weer";
     }
 
-    @GetMapping("/index")
-    public String index() {
-        return "index";
+    @GetMapping("/History")
+    public String History() {
+        return "History";
     }
 
     @GetMapping("/weer")

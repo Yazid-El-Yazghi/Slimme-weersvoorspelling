@@ -6,17 +6,162 @@
     <link rel="stylesheet" th:href="style.css">
 </head>
 <body>
-    <!-- Navigatiebar -->
-    <nav class="navbar">
-        <div class="navbar-logo">
-            <a href="/"><img src="/Images/Logo_Aquafin.png" alt="Bedrijfslogo" class="company-logo"></a>
-        </div>
-        <div class="navbar-right">
-            <a href="/index" class="nav-link nav-btn">Historische grafiek</a>
-        </div>
-    </nav>
+<!-- Navigatiebar -->
+<nav class="navbar">
+    <div class="navbar-logo">
+        <a href="/"><img src="/Images/Logo_Aquafin.png" alt="Bedrijfslogo" class="company-logo"></a>
+    </div>
+    <div class="navbar-right">
+        <a href="/index" class="nav-link nav-btn">Historische grafiek</a>
+    </div>
+</nav>
 
-    <h1>Dit is momenteel leeg, dit wordt de pagina voor de weervoorspelling</h1>
+<h1>Weervoorspelling voor de komende dagen</h1>
 
+<!-- Gemeente selectie (meerdere selecties mogelijk) -->
+<div class="year-select-container">
+    <label class="year-select-label">Kies gemeenten:</label>
+    <span id="gemeente-checkboxes">
+            <label><input type="checkbox" value="51.2194,4.4025" checked> Antwerpen</label>
+            <label><input type="checkbox" value="51.0536,3.7304"> Gent</label>
+            <label><input type="checkbox" value="51.2093,3.2247"> Brugge</label>
+            <label><input type="checkbox" value="50.8798,4.7005"> Leuven</label>
+            <label><input type="checkbox" value="51.0257,4.4776"> Mechelen</label>
+            <label><input type="checkbox" value="50.9307,5.3378"> Hasselt</label>
+            <label><input type="checkbox" value="50.8266,3.2649"> Kortrijk</label>
+            <label><input type="checkbox" value="51.2300,2.9126"> Oostende</label>
+            <label><input type="checkbox" value="50.9360,4.0355"> Aalst</label>
+            <label><input type="checkbox" value="51.1651,4.1431"> Sint-Niklaas</label>
+        </span>
+</div>
+
+<!-- Grafiek container -->
+<div class="chart-container">
+    <canvas id="forecastChart" width="800" height="400"></canvas>
+    <div id="api-season-warnings" class="flood-warnings"></div>
+</div>
+
+<!-- Chart.js externe librarie -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Gemeente info: naam, lat, lon, kleur
+    const gemeenten = [
+        { name: "Antwerpen", lat: 51.2194, lon: 4.4025, color: "#1976d2" },
+        { name: "Gent", lat: 51.0536, lon: 3.7304, color: "#43a047" },
+        { name: "Brugge", lat: 51.2093, lon: 3.2247, color: "#fbc02d" },
+        { name: "Leuven", lat: 50.8798, lon: 4.7005, color: "#e64a19" },
+        { name: "Mechelen", lat: 51.0257, lon: 4.4776, color: "#8e24aa" },
+        { name: "Hasselt", lat: 50.9307, lon: 5.3378, color: "#0097a7" },
+        { name: "Kortrijk", lat: 50.8266, lon: 3.2649, color: "#c62828" },
+        { name: "Oostende", lat: 51.2300, lon: 2.9126, color: "#388e3c" },
+        { name: "Aalst", lat: 50.9360, lon: 4.0355, color: "#966dca" },
+        { name: "Sint-Niklaas", lat: 51.1651, lon: 4.1431, color: "#0288d1" }
+    ];
+
+    let forecastChart = null;
+
+    function getDateString(offsetDays) {
+        const d = new Date();
+        d.setDate(d.getDate() + offsetDays);
+        return d.toISOString().slice(0, 10);
+    }
+
+    // Haal data op voor 1 gemeente, nu met minder variabelen
+    function fetchForecast(lat, lon) {
+        const startDate = getDateString(0);
+        const endDate = getDateString(7);
+        const apiUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}`
+            + `&daily=precipitation_sum,precipitation_probability_max,windspeed_10m_max,temperature_2m_max,temperature_2m_min`
+            + `&timezone=Europe%2FBerlin&start_date=${startDate}&end_date=${endDate}`;
+        return fetch(apiUrl)
+            .then(response => response.json())
+            .then(data => {
+                const days = data.daily.time;
+                //alle informatie dat de hover gaat tonen vanuit de API
+                return {
+                    days: days,
+                    precipitation: data.daily.precipitation_sum,
+                    precipitation_probability: data.daily.precipitation_probability_max,
+                    windspeed: data.daily.windspeed_10m_max,
+                    temp_max: data.daily.temperature_2m_max,
+                    temp_min: data.daily.temperature_2m_min
+                };
+            });
+    }
+
+    // Haal data op voor alle geselecteerde gemeenten en toon in 1 grafiek
+    function fetchAndRenderAll() {
+        const checked = Array.from(document.querySelectorAll('#gemeente-checkboxes input[type=checkbox]:checked'));
+        if (checked.length === 0) {
+            if (forecastChart) forecastChart.destroy();
+            document.getElementById('forecastChart').getContext('2d').clearRect(0,0,800,400);
+            return;
+        }
+        const selected = checked.map(cb => cb.value);
+        const gemeenteObjs = selected.map(val => {
+            const [lat, lon] = val.split(',');
+            return gemeenten.find(g => g.lat == lat && g.lon == lon);
+        });
+
+        Promise.all(
+            gemeenteObjs.map(g =>
+                fetchForecast(g.lat, g.lon).then(res => ({
+                    name: g.name,
+                    color: g.color,
+                    ...res
+                }))
+            )
+        ).then(results => {
+            const days = results[0].days;
+            const datasets = results.map((g, idx) => ({
+                label: g.name,
+                data: g.precipitation,
+                backgroundColor: g.color + "99",
+                borderColor: g.color,
+                borderWidth: 2,
+                fill: false,
+                type: 'line',
+                tension: 0.2,
+                pointRadius: 4
+            }));
+
+            const ctx = document.getElementById('forecastChart').getContext('2d');
+            if (forecastChart) forecastChart.destroy();
+            forecastChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: days,
+                    datasets: datasets
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { display: true },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.dataset.label}: ${context.parsed.y} mm`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: { display: true, text: 'Neerslag (mm)' }
+                        }
+                    }
+                }
+            });
+            document.getElementById('api-season-warnings').innerHTML = '';
+        });
+    }
+
+    // Init: toon Antwerpen standaard
+    fetchAndRenderAll();
+
+    // Event: bij wijzigen van checkboxen
+    document.getElementById('gemeente-checkboxes').addEventListener('change', fetchAndRenderAll);
+</script>
 </body>
 </html>

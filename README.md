@@ -244,6 +244,7 @@ if (maandelijkse_neerslag >= seizoen_drempel) {
 ## Team & Context
 
 **Team**: Group 5  
+**Teamleden**: Yazid El Yazghi, Damian Viracocha, Elion Rexhepi, Sorena Mohammad Rafiei Nazari, Kiran Chaud-ry
 **Vak**: Programming Project  
 **Opdrachtgever**: Aquafin  
 **Doelgroep**: Aquafin medewerkers in heel Vlaanderen  

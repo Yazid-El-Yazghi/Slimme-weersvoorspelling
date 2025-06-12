@@ -83,7 +83,6 @@ body {
     box-shadow: 0 2px 8px rgba(25,118,210,0.15);
 }
 
-/* Speciaal voor admin beheer knoppen */
 .nav-link.nav-btn.admin-action {
     background: #FFD580;
     color: #b26a00;
@@ -156,7 +155,6 @@ body {
     font-size: 1.1rem;
 }
 
-/* Pastel geel voor woensdag */
 .rain-warning {
     background: #fff9c4 !important;
     color: #b59b00;
@@ -164,7 +162,6 @@ body {
     border: 1.5px solid #ffe082;
 }
 
-/* Pastel rood voor donderdag */
 .storm-warning {
     background: #ffcdd2 !important;
     color: #b71c1c;
@@ -394,7 +391,6 @@ body {
     border: 1.5px solid #1976d2;
 }
 
-/* Switch styling */
 .switch {
     position: relative;
     display: inline-block;

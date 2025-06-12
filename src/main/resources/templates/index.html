@@ -8,7 +8,6 @@
     <link rel="stylesheet" th:href="style.css">
 </head>
 <body>
-<!-- Navigatiebar -->
 <nav class="navbar">
     <div class="navbar-logo">
         <a href="/"><img src="/Images/Logo_Aquafin.png" alt="Bedrijfslogo" class="company-logo"></a>
@@ -18,39 +17,32 @@
     </div>
 </nav>
 
-<!--Dashboard -->
 <main>
-    <!-- Jaarselectie -->
     <div class="chart-title-style" style="margin-bottom:1rem;">
         Neerslag per maand in Vlaanderen (<span id="selected-year">2024</span>)
     </div>
     <div class="year-select-container">
         <label for="year-select" class="year-select-label">Kies jaar:</label>
         <select id="year-select" class="year-select">
-            <!-- Jaren worden via javascript gevuld -->
         </select>
     </div>
 
-    <!-- Staafdiagram -->
     <div class="chart-container">
         <canvas id="rainChart" width="800" height="400"></canvas>
         <div id="season-warnings" class="flood-warnings"></div>
     </div>
-
+    
 </main>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    // Data per jaar
     const years = [
         2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,
         2015,2016,2017,2018,2019,2020,2021,2022,2023,2024
     ];
-    // Maanden in het Nederlands
     const months = [
         "Januari", "Februari", "Maart", "April", "Mei",
         "Juni", "Juli", "Augustus", "September", "Oktober", "November", "December"
     ];
-    //data van aquafin
     const allData = [
         [67,54,73,68,74,79,98,89,68,98,98,108],
         [66,45,61,57,70,82,85,78,77,94,100,103],
@@ -74,7 +66,8 @@
         [61,58,66,61,75,77,101,88,60,96,97,114]
     ];
 
-    // Vul dropdown
+    let data2025 = [];
+
     const yearSelect = document.getElementById('year-select');
     years.forEach((year, idx) => {
         const opt = document.createElement('option');
@@ -84,21 +77,43 @@
         yearSelect.appendChild(opt);
     });
 
-    // Chart.js setup
+    function renderTable(data) {
+        const tbody = document.querySelector('#rain-table tbody');
+        tbody.innerHTML = '';
+        let lastFilledMonth = data.length;
+        for (let i = 0; i < lastFilledMonth; i++) {
+            if (data[i] == null) break;
+            const tr = document.createElement('tr');
+            const maandTd = document.createElement('td');
+            maandTd.textContent = months[i];
+            const valTd = document.createElement('td');
+            valTd.textContent = data[i];
+            tr.appendChild(maandTd);
+            tr.appendChild(valTd);
+            tbody.appendChild(tr);
+        }
+    }
+
     let rainChart = null;
-    // Seizoenen mapping + drempels
     const seasons = [
-        { name: "Winter", months: [11, 0, 1], threshold: 300 }, // Dec, Jan, Feb
-        { name: "Lente", months: [2, 3, 4], threshold: 250 },   // Mrt, Apr, Mei
-        { name: "Zomer", months: [5, 6, 7], threshold: 260 },   // Jun, Jul, Aug
-        { name: "Herfst", months: [8, 9, 10], threshold: 280 }  // Sep, Okt, Nov
+        { name: "Winter", months: [11, 0, 1], threshold: 300 },
+        { name: "Lente", months: [2, 3, 4], threshold: 250 },
+        { name: "Zomer", months: [5, 6, 7], threshold: 260 },
+        { name: "Herfst", months: [8, 9, 10], threshold: 280 }
     ];
 
     function renderChart(yearIdx) {
-        const data = allData[yearIdx];
+        let data;
+        if (years[yearIdx] === 2025) {
+            data = data2025.length > 0 ? data2025 : Array(12).fill(null);
+        } else {
+            data = allData[yearIdx];
+        }
         const bgColors = data.map(val => '#4BB8F4');
         const ctx = document.getElementById('rainChart').getContext('2d');
         if (rainChart) rainChart.destroy();
+        const maxValue = Math.max(...data.filter(v => v !== null));
+        const yMax = Math.ceil((maxValue || 100) / 10) * 10;
         rainChart = new Chart(ctx, {
             type: 'bar',
             data: {
@@ -116,7 +131,7 @@
                 scales: {
                     y: {
                         beginAtZero: true,
-                        max: 150,
+                        max: yMax,
                         title: {
                             display: true,
                             text: 'Neerslag (mm)'
@@ -131,8 +146,6 @@
                 }
             }
         });
-
-        // Seizoenswaarschuwingen: som per seizoen >= drempel
         const warningsDiv = document.getElementById('season-warnings');
         warningsDiv.innerHTML = '';
         seasons.forEach(season => {
@@ -140,21 +153,43 @@
             if (sum >= season.threshold) {
                 const warning = document.createElement('div');
                 warning.className = 'flood-warning-label';
-                warning.innerHTML = `<span class="flood-icon">⚠️</span> Gevaar voor overstroming in <b>${season.name}</b> (totaal: ${sum} mm, drempel: ${season.threshold} mm)`;
+                warning.innerHTML = `<span class="flood-icon">⚠️</span> Gevaar voor overstroming in <b>${season.name}</b> (totaal: ${sum.toFixed(2)} mm, drempel: ${season.threshold} mm)`;
                 warningsDiv.appendChild(warning);
             }
         });
-
-        // Update titel
         document.getElementById('selected-year').textContent = years[yearIdx];
+        renderTable(data);
     }
 
-    // Init
-    renderChart(years.length - 1);
+    if (!years.includes(2025)) {
+        years.push(2025);
+        const opt = document.createElement('option');
+        opt.value = years.length - 1;
+        opt.textContent = 2025;
+        yearSelect.appendChild(opt);
+    }
 
-    // Event
+    window.onload = function() {
+        const index2024 = years.indexOf(2024);
+        if (index2024 !== -1) {
+            yearSelect.value = index2024;
+            renderChart(index2024);
+        }
+    };
+
     yearSelect.onchange = function() {
-        renderChart(Number(this.value));
+        const idx = Number(this.value);
+        if (years[idx] === 2025) {
+            fetch('/api/neerslag/2025')
+                .then(resp => resp.json())
+                .then(json => {
+                    data2025 = json.data;
+                    while (data2025.length < 12) data2025.push(null);
+                    renderChart(idx);
+                });
+        } else {
+            renderChart(idx);
+        }
     };
 </script>
 </body>

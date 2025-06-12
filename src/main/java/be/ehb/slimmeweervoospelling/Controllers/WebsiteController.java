@@ -5,19 +5,19 @@ import org.springframework.web.bind.annotation.GetMapping;
 // Deze controller regelt de navigatie tussen de hoofd- en indexpagina's van de webapplicatie
 @Controller
 public class WebsiteController {
-    // Root route: toont standaard de weerpagina
+    //route voor de weervoorspelling default page
     @GetMapping("/")
     public String weer() {
         return "weer";
     }
 
-    // Route voor index: toont historische gegevens
+    //historische gegevens van 2005-2025 tot nu toe
     @GetMapping("/index")
     public String index() {
         return "index";
     }
 
-    // Route voor weerpagina (optioneel, zelfde als root)
+    //
     @GetMapping("/weer")
     public String weerPage() {
         return "weer";

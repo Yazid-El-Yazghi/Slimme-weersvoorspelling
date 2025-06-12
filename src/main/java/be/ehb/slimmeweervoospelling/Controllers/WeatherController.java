@@ -10,7 +10,6 @@ public class WeatherController {
     @Autowired
     private WeatherService weatherService;
 
-
     //Deze mapping gaat de data van de API ophalen en de overstromingsrisico analyseren
     @GetMapping("/flood-risk")
     public String getFloodRisk(@RequestParam double latitude, @RequestParam double longitude) {

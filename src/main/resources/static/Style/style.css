@@ -162,3 +162,48 @@ body {
     color: #1976d2;
     font-size: 1.05rem;
 }
+/* Container voor huidig weer */
+.huidig-weer-container {
+    max-width: 400px;
+    margin: 2rem auto 1rem auto;
+    text-align: center;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    color: #222;
+    background: #fff;
+    box-shadow: 0 4px 24px rgba(25,118,210,0.10);
+}
+.huidig-weer-container h2 {
+    color: #222;
+    background-size: contain;
+    padding-bottom: 2.5em;
+}
+.huidig-weer-container h3,
+.huidig-weer-container p,
+.huidig-weer-container strong {
+    color: #222;
+}
+.huidig-weer-waarschuwing {
+    background: rgba(255,243,205,0.93);
+    color: #856404;
+    border: 2px solid #ffeeba;
+    border-radius: 8px;
+    padding: 0.7em 1em;
+    margin-bottom: 1em;
+    font-weight: 600;
+}
+.loader {
+    border: 5px solid #f3f3f3;
+    border-top: 5px solid #3498db;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+    margin: 20px auto;
+    display: none;
+}
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

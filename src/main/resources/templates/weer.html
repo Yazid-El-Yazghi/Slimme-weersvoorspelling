@@ -41,6 +41,7 @@
         <div id="api-season-warnings" class="flood-warnings"></div>
     </div>
 
+    <!-- Chart.js externe librarie -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         // Gemeente info: naam, lat, lon, kleur
@@ -65,28 +66,25 @@
             return d.toISOString().slice(0, 10);
         }
 
-        // Haal data op voor 1 gemeente
+        // Haal data op voor 1 gemeente, nu met minder variabelen
         function fetchForecast(lat, lon) {
             const startDate = getDateString(0);
-            const endDate = getDateString(7); // Alleen tot 7 dagen vooruit vanaf vandaag
-            const apiUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=precipitation_sum,precipitation_probability_max&timezone=Europe%2FBerlin&start_date=${startDate}&end_date=${endDate}`;
+            const endDate = getDateString(7);
+            const apiUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}`
+                + `&daily=precipitation_sum,precipitation_probability_max,windspeed_10m_max,temperature_2m_max,temperature_2m_min`
+                + `&timezone=Europe%2FBerlin&start_date=${startDate}&end_date=${endDate}`;
             return fetch(apiUrl)
                 .then(response => response.json())
                 .then(data => {
-                    // Selecteer alleen dag 12 t/m 16 van de maand indien beschikbaar
                     const days = data.daily.time;
-                    const precipitation = data.daily.precipitation_sum;
-                    // Filter: alleen dagen met dagnummer 12 t/m 16
-                    const filtered = days
-                        .map((dateStr, idx) => {
-                            const day = parseInt(dateStr.split('-')[2], 10);
-                            return (day >= 12 && day <= 16) ? { date: dateStr, value: precipitation[idx] } : null;
-                        })
-                        .filter(x => x !== null);
-
+                    //alle informatie dat de hover gaat tonen vanuit de API
                     return {
-                        days: filtered.map(x => x.date),
-                        precipitation: filtered.map(x => x.value)
+                        days: days,
+                        precipitation: data.daily.precipitation_sum,
+                        precipitation_probability: data.daily.precipitation_probability_max,
+                        windspeed: data.daily.windspeed_10m_max,
+                        temp_max: data.daily.temperature_2m_max,
+                        temp_min: data.daily.temperature_2m_min
                     };
                 });
         }
@@ -105,23 +103,20 @@
                 return gemeenten.find(g => g.lat == lat && g.lon == lon);
             });
 
-            // Promise: alle data ophalen
             Promise.all(
                 gemeenteObjs.map(g =>
                     fetchForecast(g.lat, g.lon).then(res => ({
                         name: g.name,
                         color: g.color,
-                        days: res.days,
-                        precipitation: res.precipitation
+                        ...res
                     }))
                 )
             ).then(results => {
-                // Gebruik de dagen van de eerste gemeente als x-as
                 const days = results[0].days;
                 const datasets = results.map((g, idx) => ({
                     label: g.name,
                     data: g.precipitation,
-                    backgroundColor: g.color + "99", // transparant
+                    backgroundColor: g.color + "99",
                     borderColor: g.color,
                     borderWidth: 2,
                     fill: false,
@@ -141,7 +136,14 @@
                     options: {
                         responsive: true,
                         plugins: {
-                            legend: { display: true }
+                            legend: { display: true },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return `${context.dataset.label}: ${context.parsed.y} mm`;
+                                    }
+                                }
+                            }
                         },
                         scales: {
                             y: {

@@ -1,5 +1,5 @@
 /* Algemene body styling */
-body {
+.lichaam {
     font-family: Arial, sans-serif;
     margin: 0;
     background: #f6f8fa;
@@ -41,18 +41,18 @@ body {
     right: unset;
 }
 /* Link in de navigatiebalk */
-.nav-link {
+.navigatie-link {
     color: #fff;
     text-decoration: none;
     margin-left: 2rem;
     font-size: 1.1rem;
     transition: color 0.2s;
 }
-.nav-link:hover {
+.navigatie-link:hover {
     color: #4fc3f7;
 }
 /* Knop in de navigatiebalk */
-.nav-link.nav-knop {
+.navigatie-link.navigatie-knop {
     background: #fff;
     color: #1976d2;
     border: none;
@@ -68,7 +68,7 @@ body {
     outline: none;
     display: inline-block;
 }
-.nav-link.nav-knop:hover {
+.navigatie-link.navigatie-knop:hover {
     background: #1976d2;
     color: #fff;
     box-shadow: 0 2px 8px rgba(25,118,210,0.15);

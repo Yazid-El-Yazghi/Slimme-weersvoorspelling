@@ -1,56 +1,54 @@
 <!DOCTYPE html>
 <html lang="${#locale.language}" xmlns:th="http://www.thymeleaf.org">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
+    <!-- Laadt de CSS voor deze pagina -->
     <link rel="stylesheet" th:href="style.css">
 </head>
 <body>
-    <!-- Navigatiebar -->
+    <!-- Navigatiebalk bovenaan -->
     <nav class="navbar">
         <div class="navbar-logo">
+            <!-- Klikbaar bedrijfslogo -->
             <a href="/"><img src="/Images/Logo_Aquafin.png" alt="Bedrijfslogo" class="company-logo"></a>
         </div>
         <div class="navbar-right">
+            <!-- Link naar de weerpagina -->
             <a href="/weer" class="nav-link nav-btn">Weer voorspelling</a>
         </div>
     </nav>
-
-    <!--Dashboard -->
     <main>
-        <!-- Jaarselectie -->
+        <!-- Titel en jaarselectie -->
         <div class="chart-title-style" style="margin-bottom:1rem;">
             Neerslag per maand in Vlaanderen (<span id="selected-year">2024</span>)
         </div>
         <div class="year-select-container">
             <label for="year-select" class="year-select-label">Kies jaar:</label>
             <select id="year-select" class="year-select">
-                <!-- Jaren worden via javascript gevuld -->
             </select>
         </div>
-
-        <!-- Staafdiagram -->
+        <!-- Grafiek en waarschuwingen -->
         <div class="chart-container">
             <canvas id="rainChart" width="800" height="400"></canvas>
             <div id="season-warnings" class="flood-warnings"></div>
         </div>
-
     </main>
+    <!-- Chart.js en script voor de grafiek-->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        // Data per jaar
+        //Array met jaren
         const years = [
             2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,
             2015,2016,2017,2018,2019,2020,2021,2022,2023,2024
         ];
-        // Maanden in het Nederlands
+        //Array met maanden
         const months = [
             "Januari", "Februari", "Maart", "April", "Mei",
             "Juni", "Juli", "Augustus", "September", "Oktober", "November", "December"
         ];
-        //data van aquafin
+        //data voor de neerslag per maand in mm
         const allData = [
             [67,54,73,68,74,79,98,89,68,98,98,108],
             [66,45,61,57,70,82,85,78,77,94,100,103],
@@ -74,7 +72,8 @@
             [61,58,66,61,75,77,101,88,60,96,97,114]
         ];
 
-        // Vul dropdown
+
+        //Dropdown voor jaren van 2005 tot 2024, standaard op 2024 gesteld
         const yearSelect = document.getElementById('year-select');
         years.forEach((year, idx) => {
             const opt = document.createElement('option');
@@ -83,21 +82,25 @@
             if (year === 2024) opt.selected = true;
             yearSelect.appendChild(opt);
         });
-
-        // Chart.js setup
         let rainChart = null;
-        // Seizoenen mapping + drempels
+        //Array met seizoenen
         const seasons = [
-            { name: "Winter", months: [11, 0, 1], threshold: 300 }, // Dec, Jan, Feb
-            { name: "Lente", months: [2, 3, 4], threshold: 250 },   // Mrt, Apr, Mei
-            { name: "Zomer", months: [5, 6, 7], threshold: 260 },   // Jun, Jul, Aug
-            { name: "Herfst", months: [8, 9, 10], threshold: 280 }  // Sep, Okt, Nov
+            { name: "Winter", months: [11, 0, 1], threshold: 300 },
+            { name: "Lente", months: [2, 3, 4], threshold: 250 },
+            { name: "Zomer", months: [5, 6, 7], threshold: 260 },
+            { name: "Herfst", months: [8, 9, 10], threshold: 280 }
         ];
 
+        //Tekent de grafiek voor het gekozen jaar en toont het op de pagina
         function renderChart(yearIdx) {
+            //haalt data op voor het gekozen jaar
             const data = allData[yearIdx];
+            //Maakt de achtergrondkleuren voor de grafiek
             const bgColors = data.map(val => '#4BB8F4');
+
+            //Maakt de grafiek met Chart.js
             const ctx = document.getElementById('rainChart').getContext('2d');
+
             if (rainChart) rainChart.destroy();
             rainChart = new Chart(ctx, {
                 type: 'bar',
@@ -131,11 +134,11 @@
                     }
                 }
             });
-
-            // Seizoenswaarschuwingen: som per seizoen >= drempel
+            // Toon waarschuwingen als er overstromingsgevaar is
             const warningsDiv = document.getElementById('season-warnings');
             warningsDiv.innerHTML = '';
             seasons.forEach(season => {
+                //Bereken de som van de neerslag voor de maanden van het seizoen
                 const sum = season.months.reduce((acc, idx) => acc + (data[idx] || 0), 0);
                 if (sum >= season.threshold) {
                     const warning = document.createElement('div');
@@ -144,15 +147,11 @@
                     warningsDiv.appendChild(warning);
                 }
             });
-
-            // Update titel
             document.getElementById('selected-year').textContent = years[yearIdx];
         }
-
-        // Init
+        // Init: toon standaard het laatste jaar
         renderChart(years.length - 1);
-
-        // Event
+        // Event: wijzig grafiek bij jaarselectie
         yearSelect.onchange = function() {
             renderChart(Number(this.value));
         };

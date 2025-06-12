@@ -68,14 +68,27 @@
         // Haal data op voor 1 gemeente
         function fetchForecast(lat, lon) {
             const startDate = getDateString(0);
-            const endDate = getDateString(7);
+            const endDate = getDateString(7); // Alleen tot 7 dagen vooruit vanaf vandaag
             const apiUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=precipitation_sum,precipitation_probability_max&timezone=Europe%2FBerlin&start_date=${startDate}&end_date=${endDate}`;
             return fetch(apiUrl)
                 .then(response => response.json())
-                .then(data => ({
-                    days: data.daily.time,
-                    precipitation: data.daily.precipitation_sum
-                }));
+                .then(data => {
+                    // Selecteer alleen dag 12 t/m 16 van de maand indien beschikbaar
+                    const days = data.daily.time;
+                    const precipitation = data.daily.precipitation_sum;
+                    // Filter: alleen dagen met dagnummer 12 t/m 16
+                    const filtered = days
+                        .map((dateStr, idx) => {
+                            const day = parseInt(dateStr.split('-')[2], 10);
+                            return (day >= 12 && day <= 16) ? { date: dateStr, value: precipitation[idx] } : null;
+                        })
+                        .filter(x => x !== null);
+
+                    return {
+                        days: filtered.map(x => x.date),
+                        precipitation: filtered.map(x => x.value)
+                    };
+                });
         }
 
         // Haal data op voor alle geselecteerde gemeenten en toon in 1 grafiek

@@ -13,4 +13,9 @@ public class WebsiteController {
     public String index() {
         return "index"; // laadt index.html
     }
+
+    @GetMapping("/weer")
+    public String weerPage() {
+        return "weer"; // maakt /weer ook geldig
+    }
 }

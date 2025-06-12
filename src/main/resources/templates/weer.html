@@ -12,12 +12,104 @@
             <img src="/Images/Logo_Aquafin.png" alt="Bedrijfslogo" class="company-logo">
         </div>
         <div class="navbar-right">
-            <a href="/account" class="nav-link nav-btn">Account</a>
-            <a href="/admin" class="nav-link nav-btn">Logout</a>
+            <a href="/index" class="nav-link nav-btn">Historiek neerslag</a>
         </div>
     </nav>
 
     <h1>Dit is momenteel leeg, dit wordt de pagina voor de weervoorspelling</h1>
-    <a href="/index">kkc,fk,fk</a>
+
+    <!-- Grafiek voor de komende 6 dagen -->
+    <div class="chart-container" style="max-width:700px;margin:2rem auto;">
+        <div class="chart-title-style" style="margin-bottom:1rem;">
+            Neerslagverwachting komende 6 dagen (Berliner coördinaten)
+        </div>
+        <canvas id="forecastChart" width="700" height="350"></canvas>
+        <div id="forecast-error" style="color:red;text-align:center;margin-top:1em;"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // API-coördinaten voor Berlijn (voorbeeld)
+        const latitude = 52.52;
+        const longitude = 13.41;
+        const apiUrl = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&daily=precipitation_sum,precipitation_probability_max&timezone=auto`;
+
+        fetch(apiUrl)
+            .then(response => response.json())
+            .then(data => {
+                // Controleer of de benodigde data aanwezig is
+                if (!data.daily || !data.daily.time || !data.daily.precipitation_sum || !data.daily.precipitation_probability_max) {
+                    document.getElementById('forecast-error').textContent = "Kon geen weerdata laden.";
+                    return;
+                }
+                // Pak de eerste 6 dagen
+                const days = data.daily.time.slice(0, 6);
+                const precipitation = data.daily.precipitation_sum.slice(0, 6);
+                const probability = data.daily.precipitation_probability_max.slice(0, 6);
+
+                // Labels: dag van de week (bijv. "ma", "di", ...)
+                const dayLabels = days.map(dateStr => {
+                    const date = new Date(dateStr);
+                    return date.toLocaleDateString('nl-BE', { weekday: 'short', day: 'numeric', month: 'short' });
+                });
+
+                // Chart.js grafiek
+                const ctx = document.getElementById('forecastChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: dayLabels,
+                        datasets: [
+                            {
+                                label: 'Neerslag (mm)',
+                                data: precipitation,
+                                backgroundColor: '#4BB8F4',
+                                borderRadius: 8,
+                                borderSkipped: false,
+                                maxBarThickness: 60,
+                                yAxisID: 'y',
+                            },
+                            {
+                                label: 'Kans op neerslag (%)',
+                                data: probability,
+                                type: 'line',
+                                borderColor: '#1976d2',
+                                backgroundColor: 'rgba(25,118,210,0.15)',
+                                tension: 0.3,
+                                fill: false,
+                                yAxisID: 'y1',
+                                pointRadius: 4,
+                                pointBackgroundColor: '#1976d2'
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: { display: true, text: 'Neerslag (mm)' },
+                                position: 'left',
+                                grid: { drawOnChartArea: true }
+                            },
+                            y1: {
+                                beginAtZero: true,
+                                title: { display: true, text: 'Kans op neerslag (%)' },
+                                position: 'right',
+                                grid: { drawOnChartArea: false },
+                                min: 0,
+                                max: 100
+                            }
+                        },
+                        plugins: {
+                            legend: { display: true }
+                        }
+                    }
+                });
+            })
+            .catch(() => {
+                document.getElementById('forecast-error').textContent = "Kon geen weerdata laden.";
+            });
+    </script>
 </body>
 </html>

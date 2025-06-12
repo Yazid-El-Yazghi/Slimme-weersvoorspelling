@@ -84,13 +84,23 @@ body {
     padding: 2rem 1rem 2.5rem 1rem;
     text-align: center;
 }
+/* Titel van de grafiek */
+.grafiek-titel {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1976d2;
+    text-align: center;
+    margin: 2rem auto 1.5rem auto;
+    padding-bottom: 0.7rem;
+    border-bottom: 2px solid #1976d2; /* Simpele blauwe lijn */
+    width: fit-content;
+}
 /* Waarschuwingen styling */
 .overstromings-waarschuwingen {
     margin-top: 1.5rem;
     text-align: center;
 }
-/* Rode waarschuwing */
-.overstromings-waarschuwing-label {
+.flood-warning-label {
     color: #d32f2f;
     font-size: 1.1rem;
     font-weight: 600;
@@ -130,4 +140,25 @@ body {
     color: #1976d2;
     font-weight: 500;
     margin-right: 0.7em;
+}
+/* Select element styling */
+.jaar-selectie {
+    font-size: 1.1rem;
+    padding: 0.4em 1.2em;
+    border-radius: 8px;
+    border: 1.5px solid #1976d2;
+    background: #f7fbff;
+    color: #1976d2;
+    outline: none;
+    transition: border 0.2s;
+    margin-left: 0.5em;
+}
+.jaar-selectie:focus {
+    border: 2px solid #4fc3f7;
+}
+/* Option element styling */
+.jaar-selectie option {
+    background: #fff;
+    color: #1976d2;
+    font-size: 1.05rem;
 }

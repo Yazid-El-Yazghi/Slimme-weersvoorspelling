@@ -16,13 +16,11 @@
     </div>
 </nav>
 
-<nav>
-    <ul class="navigatiebalk">
-        <li><a href="/weer" class="nav-link nav-knop">Weer voorspelling</a></li>
-        <li><a href="/flood-risk" class="nav-link nav-knop">Overstromingsrisico</a></li>
-        <li><a href="/contact" class="nav-link nav-knop">Contact</a></li>
-    </ul>
-</nav>
+<!--overstromingsgevaren schrijven als + en - -. als het + is tonen waar het is en wat het is en - om te minimizen.-->
+<h2 class="grafiek-titel">Meldingen overstromingsgevaar</h2>
+<div class="overstromings-waarschuwingen" id="alle-overstromings-waarschuwingen"></div>
+
+
 
 <div class="huidig-weer-container" id="huidig-weer-container">
     <h2>Huidig weer op jouw locatie</h2>
@@ -34,9 +32,6 @@
     <div id="weather-warning"></div>
     <p id="cached-notice"></p>
 </div>
-
-<!-- Flood warnings for all gemeenten, always visible -->
-<div id="alle-overstromings-waarschuwingen" class="overstromings-waarschuwingen" style="margin-bottom:2rem;"></div>
 
 <h1 class="grafiek-titel">Weervoorspelling voor de komende dagen</h1>
 <div class="jaar-selectie-container">
@@ -93,6 +88,7 @@
         }));
         waarschuwingenDiv.innerHTML = results.join('');
     });
+
 </script>
 </body>
 </html>

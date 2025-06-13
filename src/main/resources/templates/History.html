@@ -5,35 +5,35 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
-    <link rel="stylesheet" th:href="style.css">
+    <link rel="stylesheet" href="/style/style.css">
 </head>
 <body>
-<nav class="navbar">
-    <div class="navbar-logo">
-        <a href="/"><img src="/Images/Logo_Aquafin.png" alt="Bedrijfslogo" class="company-logo"></a>
+<nav class="navigatiebalk">
+    <div class="navigatiebalk-logo">
+        <a href="/"><img src="/Images/Logo_Aquafin.png" alt="Bedrijfslogo" class="bedrijfslogo"></a>
     </div>
-    <div class="navbar-right">
-        <a href="/weer" class="nav-link nav-btn">Weer voorspelling</a>
+    <div class="navigatiebalk-rechts">
+        <a href="/weer" class="nav-link nav-knop">Weer voorspelling</a>
     </div>
 </nav>
 
 <main>
-    <div class="chart-title-style" style="margin-bottom:1rem;">
+    <div class="grafiek-titel" style="margin-bottom:1rem;">
         Neerslag per maand in Vlaanderen (<span id="selected-year">2024</span>)
     </div>
-    <div class="year-select-container">
-        <label for="year-select" class="year-select-label">Kies jaar:</label>
-        <select id="year-select" class="year-select">
+    <div class="jaar-selectie-container">
+        <label for="year-select" class="jaar-selectie-label">Kies jaar:</label>
+        <select id="year-select" class="jaar-selectie">
         </select>
     </div>
 
-    <div class="chart-container">
+    <div class="grafiek-container">
         <canvas id="rainChart" width="800" height="400"></canvas>
-        <div id="season-warnings" class="flood-warnings"></div>
+        <div id="season-warnings" class="overstromings-waarschuwingen"></div>
     </div>
     
 </main>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="History.js"></script>
+<script src="/scripts/History.js"></script>
 </body>
 </html>

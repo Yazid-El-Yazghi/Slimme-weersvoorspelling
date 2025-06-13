@@ -4,27 +4,33 @@
     <meta charset="UTF-8">
     <title>Weer</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/style/style.css">
 </head>
 <body>
-<!-- Barre de navigation harmonisée -->
-<nav class="navbar">
-    <div class="navbar-logo">
-        <a href="/"><img src="/Images/Logo_Aquafin.png" alt="Bedrijfslogo" class="company-logo"></a>
+<nav class="navigatiebalk">
+    <div class="navigatiebalk-logo">
+        <a href="/"><img src="/Images/Logo_Aquafin.png" alt="Bedrijfslogo" class="bedrijfslogo"></a>
     </div>
-    <div class="navbar-right">
-        <a href="/History" class="nav-link nav-btn">Historische grafiek</a>
+    <div class="navigatiebalk-rechts">
+        <a href="/History" class="nav-link nav-knop">Historische grafiek</a>
     </div>
 </nav>
 
-<main>
-    <div class="chart-title-style" style="margin-bottom:1rem;">
-        Weervoorspelling voor de komende dagen
+<div class="huidig-weer-container" id="huidig-weer-container">
+    <h2>Huidig weer op jouw locatie</h2>
+    <button id="getWeather" class="blauwe-knop">Haal weer op</button>
+    <div class="loader" id="loader"></div>
+    <div id="weather-data">
+        <p>Klik op de knop om het weer op te halen.</p>
     </div>
-    <!-- Sélection des communes -->
-    <div class="year-select-container">
-        <label class="year-select-label">Kies gemeenten:</label>
-        <span id="gemeente-checkboxes">
+    <div id="weather-warning"></div>
+    <p id="cached-notice"></p>
+</div>
+
+<h1 class="grafiek-titel">Weervoorspelling voor de komende dagen</h1>
+<div class="jaar-selectie-container">
+    <label class="jaar-selectie-label">Kies gemeenten:</label>
+    <span id="gemeente-checkboxes">
             <label><input type="checkbox" value="51.2194,4.4025" checked> Antwerpen</label>
             <label><input type="checkbox" value="51.0536,3.7304"> Gent</label>
             <label><input type="checkbox" value="51.2093,3.2247"> Brugge</label>
@@ -36,33 +42,39 @@
             <label><input type="checkbox" value="50.9360,4.0355"> Aalst</label>
             <label><input type="checkbox" value="51.1651,4.1431"> Sint-Niklaas</label>
         </span>
-    </div>
-    <!-- Conteneur pour la graphique et les alertes -->
-    <div class="chart-container">
-        <canvas id="voorspellingGrafiek" width="800" height="400"></canvas>
-        <button id="toon-overstromingsgevaar-knop" class="edit-data-btn" style="margin-top:1.5rem;">Toon overstromingsgevaar</button>
-        <div id="api-seizoen-waarschuwingen" class="flood-warnings" style="display:none;"></div>
-    </div>
-</main>
+</div>
+<div class="grafiek-container">
+    <canvas id="voorspellingGrafiek" width="800" height="400"></canvas>
+    <button id="toon-overstromingsgevaar-knop" style="margin-top:1.5rem;">Toon overstromingsgevaar</button>
+    <div id="api-seizoen-waarschuwingen" class="overstromings-waarschuwingen" style="display:none;"></div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="/weer.js"></script>
+<script src="/scripts/weer.js"></script>
+<script src="/scripts/huidigWeer.js"></script>
 <script>
-    // Event handler pour le bouton d’alerte
-    document.getElementById('toon-overstromingsgevaar-knop').addEventListener('click', function() {
+    document.getElementById('toon-overstromingsgevaar-knop').addEventListener('click', async function() {
         const waarschuwingenDiv = document.getElementById('api-seizoen-waarschuwingen');
-        if (waarschuwingenDiv.innerHTML.trim() !== "") {
+        waarschuwingenDiv.innerHTML = '';
+        const aangevinkt = Array.from(document.querySelectorAll('#gemeente-checkboxes input[type=checkbox]:checked'));
+        if (aangevinkt.length === 0) {
+            waarschuwingenDiv.innerHTML = `<div class="overstroming-veilig-label">Geen overstromingsgevaar gedetecteerd.</div>`;
             waarschuwingenDiv.style.display = "block";
-        } else {
-            const aangevinkt = Array.from(document.querySelectorAll('#gemeente-checkboxes input[type=checkbox]:checked'));
-            if (aangevinkt.length === 0) {
-                waarschuwingenDiv.innerHTML = `<div class="overstroming-veilig-label">Geen overstromingsgevaar gedetecteerd.</div>`;
-            } else {
-                waarschuwingenDiv.innerHTML = aangevinkt.map(cb =>
-                    `<div class="overstroming-veilig-label">Geen overstromingsgevaar gedetecteerd in <b>${cb.parentElement.textContent.trim()}</b>.</div>`
-                ).join('');
-            }
-            waarschuwingenDiv.style.display = "block";
+            return;
         }
+        waarschuwingenDiv.innerHTML = 'Even geduld...';
+        waarschuwingenDiv.style.display = "block";
+        const results = await Promise.all(aangevinkt.map(async cb => {
+            const [lat, lon] = cb.value.split(',').map(Number);
+            try {
+                const resp = await fetch(`/flood-risk?latitude=${lat}&longitude=${lon}`);
+                const text = await resp.text();
+                return `<div class="${text.includes('⚠️') ? 'flood-warning-label' : 'overstroming-veilig-label'}">${cb.parentElement.textContent.trim()}:<br>${text.replace(/\n/g, '<br>')}</div>`;
+            } catch {
+                return `<div class="flood-warning-label">${cb.parentElement.textContent.trim()}:<br>Fout bij ophalen van data.</div>`;
+            }
+        }));
+        waarschuwingenDiv.innerHTML = results.join('');
     });
 </script>
 </body>

@@ -4,7 +4,7 @@ body {
     background: #f6f8fa;
 }
 
-.navbar {
+.navigatiebalk {
     width: 100%;
     background: linear-gradient(90deg, #1976d2 0%, #4fc3f7 100%);
     padding: 1rem 0;
@@ -15,7 +15,7 @@ body {
     box-shadow: 0 2px 8px rgba(0,0,0,0.07);
 }
 
-.navbar-logo {
+.navigatiebalk-logo {
     color: #fff;
     font-size: 1.5rem;
     font-weight: bold;
@@ -25,21 +25,13 @@ body {
     align-items: center;
 }
 
-.company-logo {
+.bedrijfslogo {
     height: 44px;
     width: auto;
     display: block;
 }
 
-.navbar-alert {
-    display: none;
-}
-
-.alert-icon {
-    display: none;
-}
-
-.navbar-right {
+.navigatiebalk-rechts {
     display: flex;
     gap: 1rem;
     margin-right: 2rem;
@@ -60,7 +52,7 @@ body {
     color: #4fc3f7;
 }
 
-.nav-link.nav-btn {
+.nav-link.nav-knop {
     background: #fff;
     color: #1976d2;
     border: none;
@@ -77,13 +69,13 @@ body {
     display: inline-block;
 }
 
-.nav-link.nav-btn:hover {
+.nav-link.nav-knop:hover {
     background: #1976d2;
     color: #fff;
     box-shadow: 0 2px 8px rgba(25,118,210,0.15);
 }
 
-.nav-link.nav-btn.admin-action {
+.nav-link.nav-knop.admin-action {
     background: #FFD580;
     color: #b26a00;
     font-weight: 600;
@@ -95,7 +87,7 @@ body {
     transition: background 0.2s, color 0.2s, box-shadow 0.2s;
 }
 
-.nav-link.nav-btn.admin-action:hover {
+.nav-link.nav-knop.admin-action:hover {
     background: #ffb74d;
     color: #fff;
 }
@@ -282,7 +274,7 @@ body {
     background: #b71c1c;
 }
 
-.chart-container {
+.grafiek-container {
     width: 90%;
     max-width: 900px;
     margin: 2rem auto 3rem auto;
@@ -293,22 +285,18 @@ body {
     text-align: center;
 }
 
-.chart-container h2 {
+.grafiek-titel {
+    font-size: 2rem;
+    font-weight: 700;
     color: #1976d2;
-    margin-bottom: 2rem;
-    font-size: 1.5rem;
-    font-weight: 600;
-}
-
-.chart-title-style {
-    color: #1976d2;
-    margin-bottom: 2rem;
-    font-size: 1.5rem;
-    font-weight: 600;
     text-align: center;
+    margin: 2rem auto 1.5rem auto;
+    padding-bottom: 0.7rem;
+    border-bottom: 2px solid #1976d2;
+    width: fit-content;
 }
 
-.flood-warnings {
+.overstromings-waarschuwingen {
     margin-top: 1.5rem;
     text-align: center;
 }
@@ -324,107 +312,120 @@ body {
     gap: 0.5em;
 }
 
-.flood-icon {
+.overstroming-icoon {
     font-size: 1.3em;
 }
 
-.year-select-container {
+.overstroming-veilig-label {
+    color: #218838;
+    background: #e6f9ea;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5em;
+    border-radius: 8px;
+    padding: 0.5em 1em;
+    border: 1.5px solid #b2dfdb;
+}
+
+.jaar-selectie-container {
     text-align: center;
     margin-bottom: 1.5rem;
 }
 
-.year-select-label {
+.jaar-selectie-label {
     font-size: 1.1rem;
     color: #1976d2;
     font-weight: 500;
     margin-right: 0.7em;
 }
 
-.year-select {
+.jaar-selectie {
     font-size: 1.1rem;
-    padding: 0.4em 1em;
+    padding: 0.4em 1.2em;
     border-radius: 8px;
-    border: 1px solid #b0bec5;
-    background: #f6f8fa;
+    border: 1.5px solid #1976d2;
+    background: #f7fbff;
     color: #1976d2;
-    font-weight: 500;
     outline: none;
     transition: border 0.2s;
-}
-
-.year-select:focus {
-    border: 1.5px solid #1976d2;
-}
-
-.alert-settings-form {
-    max-width: 500px;
-    margin: 0 auto;
-    padding: 1.5rem 1rem;
-    background: #f6f8fa;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(25,118,210,0.07);
-}
-
-.alert-option-row {
-    display: flex;
-    align-items: center;
-    gap: 1em;
-    margin-bottom: 1.5em;
-}
-
-.alert-option-label {
-    font-size: 1.1rem;
-    color: #1976d2;
-    font-weight: 500;
-}
-
-.alert-threshold-input {
-    width: 90px;
-    padding: 0.3em 0.7em;
-    border-radius: 6px;
-    border: 1px solid #b0bec5;
-    font-size: 1rem;
     margin-left: 0.5em;
 }
 
-.alert-threshold-input:focus {
-    border: 1.5px solid #1976d2;
+.jaar-selectie:focus {
+    border: 2px solid #4fc3f7;
 }
 
-.switch {
+.jaar-selectie option {
+    background: #fff;
+    color: #1976d2;
+    font-size: 1.05rem;
+}
+
+.huidig-weer-container {
+    max-width: 400px;
+    margin: 2rem auto 1rem auto;
+    text-align: center;
+    padding: 20px;
+    border: 1px solid #1976d2; /* super dunne blauwe border */
+    border-radius: 8px;
+    color: #222;
+    background: #fff;
+    box-shadow: 0 4px 24px rgba(25,118,210,0.15); /* blauwe shadow */
     position: relative;
-    display: inline-block;
-    width: 48px;
-    height: 28px;
+    overflow: hidden;
 }
-.switch input {
-    opacity: 0;
-    width: 0;
-    height: 0;
+
+.huidig-weer-container h2 {
+    background: linear-gradient(90deg, #1976d2 0%, #4fc3f7 100%);
+    color: #fff;
+    width: calc(100% + 40px); /* 2x padding van container */
+    margin-left: -20px;
+    margin-right: -20px;
+    margin-top: -20px;
+    margin-bottom: 0;
+    padding: 0.7em 0;
+    min-height: 3em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    border-radius: 0 !important;
 }
-.slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background-color: #e0e0e0;
-    border-radius: 28px;
-    transition: .4s;
+
+.huidig-weer-container h3,
+.huidig-weer-container p,
+.huidig-weer-container strong {
+    color: #222;
 }
-.slider:before {
-    position: absolute;
-    content: "";
-    height: 20px; width: 20px;
-    left: 4px; bottom: 4px;
-    background-color: #fff;
+
+.huidig-weer-waarschuwing {
+    background: rgba(255,243,205,0.93);
+    color: #856404;
+    border: 2px solid #ffeeba;
+    border-radius: 8px;
+    padding: 0.7em 1em;
+    margin-bottom: 1em;
+    font-weight: 600;
+}
+
+.loader {
+    border: 5px solid #f3f3f3;
+    border-top: 5px solid #3498db;
     border-radius: 50%;
-    transition: .4s;
-    box-shadow: 0 1px 4px rgba(25,118,210,0.10);
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+    margin: 20px auto;
+    display: none;
 }
-.switch input:checked + .slider {
-    background-color: #4BB8F4;
-}
-.switch input:checked + .slider:before {
-    transform: translateX(20px);
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 
 .user-table {
@@ -467,6 +468,55 @@ body {
 .user-input:focus {
     border: 1.5px solid #1976d2;
     background: #fff;
+}
+
+/* Blauw button stijl voor getWeather */
+.blauwe-knop {
+    background: #4fc3f7;
+    color: #fff;
+    border: none;
+    border-radius: 22px;
+    padding: 0.6rem 1.6rem;
+    font-size: 1.1rem;
+    font-weight: 500;
+    text-decoration: none;
+    margin: 1rem 0;
+    box-shadow: 0 1px 4px rgba(25,118,210,0.07);
+    transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+    outline: none;
+}
+.blauwe-knop:hover {
+    background: #1976d2;
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(25,118,210,0.15);
+}
+
+/* Huidig weer titel met blauwe achtergrond en witte tekst */
+.huidig-weer-container h2 {
+    background: #1976d2;
+    color: #fff;
+    border-radius: 8px;
+    padding: 0.7em 0;
+    margin-bottom: 1.5em;
+    background-size: contain;
+}
+
+#weather-data {
+    background: #f0f1f3;
+    padding: 1em;
+    border-radius: 8px;
+    margin-top: 1em;
+    text-align: left;
+}
+
+#weather-data p {
+    text-align: left;
+    margin: 0 0 0.7em 0;
+}
+
+#weather-data h3 {
+    text-align: center;
 }
 
 @media (max-width: 700px) {

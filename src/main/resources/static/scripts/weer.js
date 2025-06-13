@@ -1,4 +1,3 @@
-// Lijst van gemeenten met naam, coördinaten en kleur voor de grafiek
 const gemeenten = [
     { naam: "Antwerpen", lat: 51.2194, lon: 4.4025, kleur: "#1976d2" },
     { naam: "Gent", lat: 51.0536, lon: 3.7304, kleur: "#43a047" },
@@ -12,31 +11,24 @@ const gemeenten = [
     { naam: "Sint-Niklaas", lat: 51.1651, lon: 4.1431, kleur: "#0288d1" }
 ];
 
-// Chart.js grafiek object
 let voorspellingGrafiek = null;
 
-// Geeft een datumstring terug voor vandaag + offsetDagen
 function getDatumString(offsetDagen) {
-    // Berekent de datum als string voor de API
     const d = new Date();
     d.setDate(d.getDate() + offsetDagen);
     return d.toISOString().slice(0, 10);
 }
 
-// Haalt de voorspelling op voor een gemeente via de Open-Meteo API
 function haalVoorspellingOp(lat, lon) {
-    //Bouwt de API-url en haalt de data op
     const startDatum = getDatumString(0);
     const eindDatum = getDatumString(7);
     const apiUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}`
         + `&daily=precipitation_sum,precipitation_probability_max,windspeed_10m_max,temperature_2m_max,temperature_2m_min`
         + `&timezone=Europe%2FBerlin&start_date=${startDatum}&end_date=${eindDatum}`;
 
-    // Voert de fetch uit en retourneert de data voor de grafiek
     return fetch(apiUrl)
         .then(response => response.json())
         .then(data => {
-            // Retourneert alle relevante data voor de grafiek en tooltip
             const dagen = data.daily.time;
             return {
                 dagen: dagen,
@@ -49,7 +41,6 @@ function haalVoorspellingOp(lat, lon) {
         });
 }
 
-//arary seizoenen en hun overstromingsgevaar maximum drempels
 const seizoenDefinities = [
     { naam: "Winter", maanden: [11, 0, 1], drempel: 300 },
     { naam: "Lente", maanden: [2, 3, 4], drempel: 250 },
@@ -57,9 +48,7 @@ const seizoenDefinities = [
     { naam: "Herfst", maanden: [8, 9, 10], drempel: 280 }
 ];
 
-//Bepaalt het seizoen op basis van maandindex
 function bepaalSeizoen(maandIndex) {
-    //Geeft de seizoensnaam terug voor een maandindex
     if ([11, 0, 1].includes(maandIndex)) return "Winter";
     if ([2, 3, 4].includes(maandIndex)) return "Lente";
     if ([5, 6, 7].includes(maandIndex)) return "Zomer";
@@ -67,7 +56,6 @@ function bepaalSeizoen(maandIndex) {
     return null;
 }
 
-// Controleert of er overstromingsgevaar is in de huidige maand
 function controleerOverstromingsgevaarHuidigeMaand(dagen, neerslag) {
     const nu = new Date();
     const huidigeMaand = nu.getMonth();
@@ -81,7 +69,6 @@ function controleerOverstromingsgevaarHuidigeMaand(dagen, neerslag) {
         }
     }
 
-    //Zoekt het seizoen dat past bij de huidige maand
     const seizoen = seizoenDefinities.find(s => s.naam === huidigSeizoen);
     if (seizoen && totaal >= seizoen.drempel) {
         return [`⚠️ Gevaar voor overstroming in <b>${huidigSeizoen}</b> (totaal: ${totaal.toFixed(1)} mm, drempel: ${seizoen.drempel} mm)`];
@@ -89,32 +76,25 @@ function controleerOverstromingsgevaarHuidigeMaand(dagen, neerslag) {
     return [];
 }
 
-//Haalt het overstromingsgevaar op via de backend endpoint
 function haalOverstromingsgevaarOp(lat, lon) {
-    // Vraagt flood-risk endpoint aan voor deze locatie
     return fetch(`/flood-risk?latitude=${lat}&longitude=${lon}`)
         .then(res => res.text());
 }
 
-//haalt alle data op en tekent de grafiek + waarschuwingen
 function haalEnToonAllesOp() {
-    //haalt de aangevinkte gemeenten op
     const aangevinkt = Array.from(document.querySelectorAll('#gemeente-checkboxes input[type=checkbox]:checked'));
     if (aangevinkt.length === 0) {
-        // Leegt de grafiek en waarschuwingen als niets geselecteerd
         if (voorspellingGrafiek) voorspellingGrafiek.destroy();
         document.getElementById('voorspellingGrafiek').getContext('2d').clearRect(0,0,800,400);
         document.getElementById('api-seizoen-waarschuwingen').innerHTML = '';
         return;
     }
-    //zet de geselecteerde gemeenten om naar objecten
     const geselecteerd = aangevinkt.map(cb => cb.value);
     const gemeenteObjecten = geselecteerd.map(val => {
         const [lat, lon] = val.split(',');
         return gemeenten.find(g => g.lat == lat && g.lon == lon);
     });
 
-    //haal voor elke gemeente de voorspelling op
     Promise.all(
         gemeenteObjecten.map(g =>
             haalVoorspellingOp(g.lat, g.lon).then(res => ({
@@ -126,7 +106,6 @@ function haalEnToonAllesOp() {
             }))
         )
     ).then(resultaten => {
-        // Zet de data om naar datasets voor Chart.js
         const dagen = resultaten[0].dagen;
         const datasets = resultaten.map((g, idx) => ({
             label: g.naam,
@@ -140,7 +119,6 @@ function haalEnToonAllesOp() {
             pointRadius: 4
         }));
 
-        // Teken de grafiek
         const ctx = document.getElementById('voorspellingGrafiek').getContext('2d');
         if (voorspellingGrafiek) voorspellingGrafiek.destroy();
         voorspellingGrafiek = new Chart(ctx, {
@@ -155,7 +133,6 @@ function haalEnToonAllesOp() {
                     legend: { display: true },
                     tooltip: {
                         callbacks: {
-                            // Tooltip toont gemeente en neerslag
                             label: function(context) {
                                 return `${context.dataset.label}: ${context.parsed.y} mm`;
                             }
@@ -171,7 +148,6 @@ function haalEnToonAllesOp() {
             }
         });
 
-        //Haal waarschuwingen op via backend en toon ze
         const waarschuwingenDiv = document.getElementById('api-seizoen-waarschuwingen');
         waarschuwingenDiv.innerHTML = '';
         waarschuwingenDiv.style.display = "none";
@@ -182,7 +158,6 @@ function haalEnToonAllesOp() {
         ).then(waarschuwingen => {
             waarschuwingen.forEach(w => {
                 const div = document.createElement('div');
-                //toont groene of rode waarschuwing afhankelijk van het resultaat
                 if (w.bericht.trim().toLowerCase().includes('geen overstromingsgevaar')) {
                     div.className = 'overstroming-veilig-label';
                     div.innerHTML = `Geen overstromingsgevaar gedetecteerd in <b>${w.naam}</b>.`;
@@ -196,8 +171,6 @@ function haalEnToonAllesOp() {
     });
 }
 
-
 haalEnToonAllesOp();
 
-//Voeg de checkboxen toe aan de pagina
 document.getElementById('gemeente-checkboxes').addEventListener('change', haalEnToonAllesOp);

@@ -3,6 +3,12 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     background: #f6f8fa;
+    /* Voeg hieronder de achtergrondafbeelding toe */
+    background-image: url("/Images/aquafin2.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center center;
 }
 /* Navigatiebalk styling */
 .navigatiebalk {
@@ -85,15 +91,31 @@ body {
     text-align: center;
 }
 /* Titel van de grafiek */
+.grafiek-header {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    width: fit-content;
+    margin: 2rem auto 1.5rem auto;
+    padding: 1.2rem 2.5rem 1.2rem 2.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.7rem;
+}
+
 .grafiek-titel {
     font-size: 2rem;
     font-weight: 700;
     color: #1976d2;
     text-align: center;
-    margin: 2rem auto 1.5rem auto;
+    margin: 0;
+    padding: 0;
+    border-bottom: 2px solid #1976d2;
+    width: 100%;
+    background: transparent;
+    border-radius: 0;
     padding-bottom: 0.7rem;
-    border-bottom: 2px solid #1976d2; /* Simpele blauwe lijn */
-    width: fit-content;
 }
 /* Waarschuwingen styling */
 .overstromings-waarschuwingen {
@@ -131,8 +153,12 @@ body {
 }
 /* Container voor jaarselectie */
 .jaar-selectie-container {
+    background: transparent;
+    border-radius: 0;
+    margin-bottom: 0;
+    margin-top: 0.5rem;
+    padding: 0;
     text-align: center;
-    margin-bottom: 1.5rem;
 }
 /* Label voor jaarselectie */
 .jaar-selectie-label {
@@ -164,28 +190,49 @@ body {
 }
 /* Container voor huidig weer */
 .huidig-weer-container {
-    max-width: 400px;
-    margin: 2rem auto 1rem auto;
+    max-width: 420px;
+    margin: 2.5rem auto 2rem auto;
     text-align: center;
-    padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    color: #222;
-    background: #fff;
-    box-shadow: 0 4px 24px rgba(25,118,210,0.10);
+    padding: 2.2rem 2rem 2rem 2rem;
+    border-radius: 18px;
+    background: linear-gradient(120deg, #e3f2fd 60%, #b3e5fc 100%);
+    box-shadow: 0 4px 24px rgba(25,118,210,0.13), 0 1.5px 6px rgba(76,184,244,0.08);
+    border: 1.5px solid #4bb8f4;
 }
+
 .huidig-weer-container h2 {
-    color: #222;
-    background-size: contain;
-    padding-bottom: 2.5em;
+    color: #1976d2;
+    margin-top: 0;
+    margin-bottom: 1.2rem;
+    font-size: 1.5rem;
+    font-weight: 700;
 }
-.huidig-weer-container h3,
-.huidig-weer-container p,
-.huidig-weer-container strong {
-    color: #222;
+
+.huidig-weer-container button {
+    background: #4bb8f4;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 0.6rem 1.4rem;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-bottom: 1rem;
+    transition: background 0.2s;
 }
+.huidig-weer-container button:hover {
+    background: #1976d2;
+}
+
+.huidig-weer-container #weather-data,
+.huidig-weer-container #weather-warning,
+.huidig-weer-container #cached-notice {
+    margin-top: 1rem;
+    font-size: 1.05rem;
+    text-align: center;
+}
+
 .huidig-weer-waarschuwing {
-    background: rgba(255,243,205,0.93);
+    background: #fff3cd;
     color: #856404;
     border: 2px solid #ffeeba;
     border-radius: 8px;

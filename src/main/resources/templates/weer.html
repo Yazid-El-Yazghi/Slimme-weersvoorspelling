@@ -27,21 +27,23 @@
         <p id="cached-notice"></p>
     </div>
 
-    <h1 class="grafiek-titel">Weervoorspelling voor de komende dagen</h1>
-    <div class="jaar-selectie-container">
-        <label class="jaar-selectie-label">Kies gemeenten:</label>
-        <span id="gemeente-checkboxes">
-            <label><input type="checkbox" value="51.2194,4.4025" checked> Antwerpen</label>
-            <label><input type="checkbox" value="51.0536,3.7304"> Gent</label>
-            <label><input type="checkbox" value="51.2093,3.2247"> Brugge</label>
-            <label><input type="checkbox" value="50.8798,4.7005"> Leuven</label>
-            <label><input type="checkbox" value="51.0257,4.4776"> Mechelen</label>
-            <label><input type="checkbox" value="50.9307,5.3378"> Hasselt</label>
-            <label><input type="checkbox" value="50.8266,3.2649"> Kortrijk</label>
-            <label><input type="checkbox" value="51.2300,2.9126"> Oostende</label>
-            <label><input type="checkbox" value="50.9360,4.0355"> Aalst</label>
-            <label><input type="checkbox" value="51.1651,4.1431"> Sint-Niklaas</label>
-        </span>
+    <div class="grafiek-header">
+        <h1 class="grafiek-titel">Weervoorspelling voor de komende dagen</h1>
+        <div class="jaar-selectie-container">
+            <label class="jaar-selectie-label">Kies gemeenten:</label>
+            <span id="gemeente-checkboxes">
+                <label><input type="checkbox" value="51.2194,4.4025" checked> Antwerpen</label>
+                <label><input type="checkbox" value="51.0536,3.7304"> Gent</label>
+                <label><input type="checkbox" value="51.2093,3.2247"> Brugge</label>
+                <label><input type="checkbox" value="50.8798,4.7005"> Leuven</label>
+                <label><input type="checkbox" value="51.0257,4.4776"> Mechelen</label>
+                <label><input type="checkbox" value="50.9307,5.3378"> Hasselt</label>
+                <label><input type="checkbox" value="50.8266,3.2649"> Kortrijk</label>
+                <label><input type="checkbox" value="51.2300,2.9126"> Oostende</label>
+                <label><input type="checkbox" value="50.9360,4.0355"> Aalst</label>
+                <label><input type="checkbox" value="51.1651,4.1431"> Sint-Niklaas</label>
+            </span>
+        </div>
     </div>
     <div class="grafiek-container">
         <canvas id="voorspellingGrafiek" width="800" height="400"></canvas>

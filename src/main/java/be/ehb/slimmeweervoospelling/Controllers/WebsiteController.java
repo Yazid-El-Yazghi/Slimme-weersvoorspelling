@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.*;
 import be.ehb.slimmeweervoospelling.model.APi;
 
+// Controller voor de website
+
 @Controller
 public class WebsiteController {
     @GetMapping("/")

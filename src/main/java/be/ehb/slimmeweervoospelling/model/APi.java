@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+//api voor het ophalen van neerslaggegevens per maand in 2025
 public class APi {
     public static List<Double> getNeerslagPerMaand2025() {
         List<Double> maandTotalen = new ArrayList<>();

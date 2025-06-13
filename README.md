@@ -157,7 +157,7 @@ mvn spring-boot:run
 
 4. **Applicatie bereiken**
 ```
-http://localhost:1070
+http://localhost:1070 en of 8080
 ```
 
 De applicatie draait standaard op poort 1070 zoals geconfigureerd in `application.properties`.

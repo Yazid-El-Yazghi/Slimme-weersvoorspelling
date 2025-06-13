@@ -96,6 +96,7 @@ Het overstromingsrisicoalgoritme gebruikt seizoensgebonden drempelwaarden:
 ### External APIs
 - **Open-Meteo**: `https://api.open-meteo.com/v1/forecast`
 - **Meteo.be**: `https://opendata.meteo.be/service/ows` (WFS service)
+- **OpenWeatherMap**: `https://openweathermap.org/api`
 
 ## Project Structuur
 

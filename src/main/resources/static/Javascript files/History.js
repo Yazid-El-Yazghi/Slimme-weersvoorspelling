@@ -1,33 +1,11 @@
-/**
- * Historische neerslagdata visualisatie script
- * @module History
- * @description Script voor het visualiseren van historische neerslaggegevens in Vlaanderen met behulp van Chart.js
- */
-
-/**
- * Array met jaren waarvoor historische gegevens beschikbaar zijn
- * @type {number[]}
- */
 const years = [
     2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,
     2015,2016,2017,2018,2019,2020,2021,2022,2023,2024
 ];
-
-/**
- * Array met maandnamen in het Nederlands
- * @type {string[]}
- */
 const months = [
     "Januari", "Februari", "Maart", "April", "Mei",
     "Juni", "Juli", "Augustus", "September", "Oktober", "November", "December"
 ];
-
-/**
- * Matrix met neerslaggegevens per jaar en maand in millimeters
- * Eerste dimensie: jaren (index corresponderend met years array)
- * Tweede dimensie: maanden (12 waarden per jaar)
- * @type {number[][]}
- */
 const allData = [
     [67,54,73,68,74,79,98,89,68,98,98,108],
     [66,45,61,57,70,82,85,78,77,94,100,103],
@@ -51,21 +29,12 @@ const allData = [
     [61,58,66,61,75,77,101,88,60,96,97,114]
 ];
 
-/**
- * Array om gegevens voor 2025 op te slaan die via API worden opgehaald
- * @type {number[]}
- */
 let data2025 = [];
 
-/**
- * Referentie naar het jaar-selectie dropdown element
- * @type {HTMLSelectElement}
- */
+
 const yearSelect = document.getElementById('year-select');
 
-/**
- * Vult de jaar-selectie dropdown met beschikbare jaren
- */
+
 years.forEach((year, idx) => {
     const opt = document.createElement('option');
     opt.value = idx;
@@ -74,10 +43,7 @@ years.forEach((year, idx) => {
     yearSelect.appendChild(opt);
 });
 
-/**
- * Genereert een tabel met neerslaggegevens voor het geselecteerde jaar
- * @param {number[]} data - Array met neerslaggegevens per maand
- */
+
 function renderTable(data) {
     const tbody = document.querySelector('#rain-table tbody');
     tbody.innerHTML = '';
@@ -95,16 +61,10 @@ function renderTable(data) {
     }
 }
 
-/**
- * Variabele om de Chart.js grafiek instantie bij te houden
- * @type {Chart}
- */
+
 let rainChart = null;
 
-/**
- * Definitie van de seizoenen met overstromingsdrempelwaarden
- * @type {Array<{name: string, months: number[], threshold: number}>}
- */
+
 const seasons = [
     { name: "Winter", months: [11, 0, 1], threshold: 300 },
     { name: "Lente", months: [2, 3, 4], threshold: 250 },
@@ -112,11 +72,7 @@ const seasons = [
     { name: "Herfst", months: [8, 9, 10], threshold: 280 }
 ];
 
-/**
- * Genereert een grafiek met neerslaggegevens voor het geselecteerde jaar
- * Toont ook waarschuwingen voor seizoenen met verhoogd overstromingsrisico
- * @param {number} yearIdx - Index van het geselecteerde jaar in de years array
- */
+
 function renderChart(yearIdx) {
     let data;
     if (years[yearIdx] === 2025) {
@@ -161,7 +117,7 @@ function renderChart(yearIdx) {
             }
         }
     });
-    
+
     /**
      * Toon waarschuwingen voor seizoenen met overstromingsrisico
      */
@@ -180,9 +136,6 @@ function renderChart(yearIdx) {
     renderTable(data);
 }
 
-/**
- * Voegt het jaar 2025 toe aan de selectielijst indien het nog niet bestaat
- */
 if (!years.includes(2025)) {
     years.push(2025);
     const opt = document.createElement('option');
@@ -191,9 +144,6 @@ if (!years.includes(2025)) {
     yearSelect.appendChild(opt);
 }
 
-/**
- * Initialiseert de grafiek met gegevens voor 2024 bij het laden van de pagina
- */
 window.onload = function() {
     const index2024 = years.indexOf(2024);
     if (index2024 !== -1) {
@@ -202,10 +152,6 @@ window.onload = function() {
     }
 };
 
-/**
- * Event handler voor verandering van het geselecteerde jaar
- * Haalt gegevens op voor 2025 via een API-call indien nodig
- */
 yearSelect.onchange = function() {
     const idx = Number(this.value);
     if (years[idx] === 2025) {

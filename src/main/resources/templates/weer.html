@@ -16,6 +16,14 @@
     </div>
 </nav>
 
+<nav>
+    <ul class="navigatiebalk">
+        <li><a href="/weer" class="nav-link nav-knop">Weer voorspelling</a></li>
+        <li><a href="/flood-risk" class="nav-link nav-knop">Overstromingsrisico</a></li>
+        <li><a href="/contact" class="nav-link nav-knop">Contact</a></li>
+    </ul>
+</nav>
+
 <div class="huidig-weer-container" id="huidig-weer-container">
     <h2>Huidig weer op jouw locatie</h2>
     <button id="getWeather" class="blauwe-knop">Haal weer op</button>
@@ -26,6 +34,9 @@
     <div id="weather-warning"></div>
     <p id="cached-notice"></p>
 </div>
+
+<!-- Flood warnings for all gemeenten, always visible -->
+<div id="alle-overstromings-waarschuwingen" class="overstromings-waarschuwingen" style="margin-bottom:2rem;"></div>
 
 <h1 class="grafiek-titel">Weervoorspelling voor de komende dagen</h1>
 <div class="jaar-selectie-container">
@@ -45,33 +56,39 @@
 </div>
 <div class="grafiek-container">
     <canvas id="voorspellingGrafiek" width="800" height="400"></canvas>
-    <button id="toon-overstromingsgevaar-knop" class="blauwe-knop" style="margin-top:1.5rem;">Toon overstromingsgevaar</button>
-    <div id="api-seizoen-waarschuwingen" class="overstromings-waarschuwingen" style="display:none;"></div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="/Javascript%20files/weer.js"></script>
 <script src="/Javascript%20files/huidigWeer.js"></script>
 <script>
-    document.getElementById('toon-overstromingsgevaar-knop').addEventListener('click', async function() {
-        const waarschuwingenDiv = document.getElementById('api-seizoen-waarschuwingen');
-        waarschuwingenDiv.innerHTML = '';
-        const aangevinkt = Array.from(document.querySelectorAll('#gemeente-checkboxes input[type=checkbox]:checked'));
-        if (aangevinkt.length === 0) {
-            waarschuwingenDiv.innerHTML = `<div class="overstroming-veilig-label">Geen overstromingsgevaar gedetecteerd.</div>`;
-            waarschuwingenDiv.style.display = "block";
-            return;
-        }
+    // Toon flood warnings van alle gemeenten direct bij laden
+    window.addEventListener('DOMContentLoaded', async function() {
+        const gemeenten = [
+            { naam: "Antwerpen", lat: 51.2194, lon: 4.4025 },
+            { naam: "Gent", lat: 51.0536, lon: 3.7304 },
+            { naam: "Brugge", lat: 51.2093, lon: 3.2247 },
+            { naam: "Leuven", lat: 50.8798, lon: 4.7005 },
+            { naam: "Mechelen", lat: 51.0257, lon: 4.4776 },
+            { naam: "Hasselt", lat: 50.9307, lon: 5.3378 },
+            { naam: "Kortrijk", lat: 50.8266, lon: 3.2649 },
+            { naam: "Oostende", lat: 51.2300, lon: 2.9126 },
+            { naam: "Aalst", lat: 50.9360, lon: 4.0355 },
+            { naam: "Sint-Niklaas", lat: 51.1651, lon: 4.1431 }
+        ];
+        const waarschuwingenDiv = document.getElementById('alle-overstromings-waarschuwingen');
         waarschuwingenDiv.innerHTML = 'Even geduld...';
-        waarschuwingenDiv.style.display = "block";
-        const results = await Promise.all(aangevinkt.map(async cb => {
-            const [lat, lon] = cb.value.split(',').map(Number);
+        const results = await Promise.all(gemeenten.map(async g => {
             try {
-                const resp = await fetch(`/flood-risk?latitude=${lat}&longitude=${lon}`);
+                const resp = await fetch(`/flood-risk?latitude=${g.lat}&longitude=${g.lon}`);
                 const text = await resp.text();
-                return `<div class="${text.includes('⚠️') ? 'flood-warning-label' : 'overstroming-veilig-label'}">${cb.parentElement.textContent.trim()}:<br>${text.replace(/\n/g, '<br>')}</div>`;
+                if (text.trim().toLowerCase().includes('geen overstromingsgevaar')) {
+                    return `<div class="overstroming-veilig-label">Geen overstromingsgevaar gedetecteerd in <b>${g.naam}</b>.</div>`;
+                } else {
+                    return `<div class="flood-warning-label"><span class="overstroming-icoon">⚠️</span> <b>${g.naam}</b>: ${text.replace(/\n/g, '<br>')}</div>`;
+                }
             } catch {
-                return `<div class="flood-warning-label">${cb.parentElement.textContent.trim()}:<br>Fout bij ophalen van data.</div>`;
+                return `<div class="flood-warning-label"><span class="overstroming-icoon">⚠️</span> <b>${g.naam}</b>: Fout bij ophalen van data.</div>`;
             }
         }));
         waarschuwingenDiv.innerHTML = results.join('');

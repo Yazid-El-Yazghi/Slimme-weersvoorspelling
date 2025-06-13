@@ -76,17 +76,11 @@ function controleerOverstromingsgevaarHuidigeMaand(dagen, neerslag) {
     return [];
 }
 
-function haalOverstromingsgevaarOp(lat, lon) {
-    return fetch(`/flood-risk?latitude=${lat}&longitude=${lon}`)
-        .then(res => res.text());
-}
-
 function haalEnToonAllesOp() {
     const aangevinkt = Array.from(document.querySelectorAll('#gemeente-checkboxes input[type=checkbox]:checked'));
     if (aangevinkt.length === 0) {
         if (voorspellingGrafiek) voorspellingGrafiek.destroy();
         document.getElementById('voorspellingGrafiek').getContext('2d').clearRect(0,0,800,400);
-        document.getElementById('api-seizoen-waarschuwingen').innerHTML = '';
         return;
     }
     const geselecteerd = aangevinkt.map(cb => cb.value);
@@ -146,27 +140,6 @@ function haalEnToonAllesOp() {
                     }
                 }
             }
-        });
-
-        const waarschuwingenDiv = document.getElementById('api-seizoen-waarschuwingen');
-        waarschuwingenDiv.innerHTML = '';
-        waarschuwingenDiv.style.display = "none";
-        Promise.all(
-            resultaten.map(g =>
-                haalOverstromingsgevaarOp(g.lat, g.lon).then(bericht => ({ naam: g.naam, bericht }))
-            )
-        ).then(waarschuwingen => {
-            waarschuwingen.forEach(w => {
-                const div = document.createElement('div');
-                if (w.bericht.trim().toLowerCase().includes('geen overstromingsgevaar')) {
-                    div.className = 'overstroming-veilig-label';
-                    div.innerHTML = `Geen overstromingsgevaar gedetecteerd in <b>${w.naam}</b>.`;
-                } else {
-                    div.className = 'overstromings-waarschuwing-label';
-                    div.innerHTML = `<span class="overstroming-icoon">⚠️</span> <b>${w.naam}</b>: ${w.bericht.replace(/\n/g, "<br>")}`;
-                }
-                waarschuwingenDiv.appendChild(div);
-            });
         });
     });
 }

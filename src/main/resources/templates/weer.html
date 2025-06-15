@@ -1,69 +1,55 @@
 <!DOCTYPE html>
-<html lang="${#locale.language}" xmlns:th="http://www.thymeleaf.org">
+<html lang="nl">
 <head>
     <meta charset="UTF-8">
-    <title>Weer</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/style.css">
+    <title>Weer Dashboard</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-<body>
-<!-- Barre de navigation harmonisée -->
+<body>ç
 <nav class="navbar">
     <div class="navbar-logo">
-        <a href="/"><img src="/Images/Logo_Aquafin.png" alt="Bedrijfslogo" class="company-logo"></a>
+        <a href="/"><img src="/Images/Logo_Aquafin.png" alt="Logo" class="company-logo"></a>
     </div>
     <div class="navbar-right">
-        <a href="/History" class="nav-link nav-btn">Historische grafiek</a>
+        <a href="/weer" class="nav-link nav-btn">Weer voorspelling</a>
     </div>
-</nav>
+</nav> 
 
 <main>
-    <div class="chart-title-style" style="margin-bottom:1rem;">
-        Weervoorspelling voor de komende dagen
+    <div class="chart-title-style">
+        Neerslag in <span id="selected-region">Antwerpen</span> in <span id="selected-year">2024</span>
     </div>
-    <!-- Sélection des communes -->
+
     <div class="year-select-container">
-        <label class="year-select-label">Kies gemeenten:</label>
-        <span id="gemeente-checkboxes">
-            <label><input type="checkbox" value="51.2194,4.4025" checked> Antwerpen</label>
-            <label><input type="checkbox" value="51.0536,3.7304"> Gent</label>
-            <label><input type="checkbox" value="51.2093,3.2247"> Brugge</label>
-            <label><input type="checkbox" value="50.8798,4.7005"> Leuven</label>
-            <label><input type="checkbox" value="51.0257,4.4776"> Mechelen</label>
-            <label><input type="checkbox" value="50.9307,5.3378"> Hasselt</label>
-            <label><input type="checkbox" value="50.8266,3.2649"> Kortrijk</label>
-            <label><input type="checkbox" value="51.2300,2.9126"> Oostende</label>
-            <label><input type="checkbox" value="50.9360,4.0355"> Aalst</label>
-            <label><input type="checkbox" value="51.1651,4.1431"> Sint-Niklaas</label>
-        </span>
+        <label for="year-select" class="year-select-label">Kies jaar:</label>
+        <select id="year-select" class="year-select"></select>
     </div>
-    <!-- Conteneur pour la graphique et les alertes -->
+
+    <div class="region-button-group">
+        <button class="region-btn active" data-region="antwerpen">Antwerpen</button>
+        <button class="region-btn" data-region="borgerhout">Borgerhout</button>
+        <button class="region-btn" data-region="deurne">Deurne</button>
+        <button class="region-btn" data-region="merksem">Merksem</button>
+    </div>
+
     <div class="chart-container">
-        <canvas id="voorspellingGrafiek" width="800" height="400"></canvas>
-        <button id="toon-overstromingsgevaar-knop" class="edit-data-btn" style="margin-top:1.5rem;">Toon overstromingsgevaar</button>
-        <div id="api-seizoen-waarschuwingen" class="flood-warnings" style="display:none;"></div>
+        <canvas id="rainChart" width="800" height="400"></canvas>
+        <div id="season-warnings" class="flood-warnings"></div>
     </div>
+
+    <table class="user-table" id="rain-table">
+        <thead>
+        <tr>
+            <th>Maand</th>
+            <th>Neerslag (mm)</th>
+        </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
 </main>
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="/weer.js"></script>
-<script>
-    // Event handler pour le bouton d’alerte
-    document.getElementById('toon-overstromingsgevaar-knop').addEventListener('click', function() {
-        const waarschuwingenDiv = document.getElementById('api-seizoen-waarschuwingen');
-        if (waarschuwingenDiv.innerHTML.trim() !== "") {
-            waarschuwingenDiv.style.display = "block";
-        } else {
-            const aangevinkt = Array.from(document.querySelectorAll('#gemeente-checkboxes input[type=checkbox]:checked'));
-            if (aangevinkt.length === 0) {
-                waarschuwingenDiv.innerHTML = `<div class="overstroming-veilig-label">Geen overstromingsgevaar gedetecteerd.</div>`;
-            } else {
-                waarschuwingenDiv.innerHTML = aangevinkt.map(cb =>
-                    `<div class="overstroming-veilig-label">Geen overstromingsgevaar gedetecteerd in <b>${cb.parentElement.textContent.trim()}</b>.</div>`
-                ).join('');
-            }
-            waarschuwingenDiv.style.display = "block";
-        }
-    });
-</script>
+<script src="History.js"></script>
+
 </body>
 </html>

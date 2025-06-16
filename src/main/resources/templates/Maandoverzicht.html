@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="nl" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Maandoverzicht</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/Style/style.css">
+</head>
+<body>
+<nav class="navigatiebalk">
+  <div class="navigatiebalk-logo">
+    <a href="/"><img src="/Images/Logo_Aquafin.png" alt="Bedrijfslogo" class="bedrijfslogo"></a>
+  </div>
+  <div class="navigatiebalk-rechts">
+    <a href="/History" class="nav-link nav-knop">Historische grafiek</a>
+    <a href="/weer" class="nav-link nav-knop">Weer voorspelling</a>
+  </div>
+</nav>
+<main>
+  <div class="grafiek-header">
+    <h1 class="grafiek-titel">Neerslag maand juni - <span id="maand-naam"></span> <span id="jaar"></span></h1>
+    <div class="jaar-selectie-container">
+      <label class="jaar-selectie-label">Kies gemeente:</label>
+      <select id="gemeente-select" class="jaar-selectie">
+        <option value="51.2194,4.4025">Antwerpen</option>
+        <option value="51.0536,3.7304">Gent</option>
+        <option value="51.2093,3.2247">Brugge</option>
+        <option value="50.8798,4.7005">Leuven</option>
+        <option value="51.0257,4.4776">Mechelen</option>
+        <option value="50.9307,5.3378">Hasselt</option>
+        <option value="50.8266,3.2649">Kortrijk</option>
+        <option value="51.2300,2.9126">Oostende</option>
+        <option value="50.9360,4.0355">Aalst</option>
+        <option value="51.1651,4.1431">Sint-Niklaas</option>
+      </select>
+    </div>
+  </div>
+  <div class="grafiek-container">
+    <canvas id="maandGrafiek" width="900" height="400"></canvas>
+    <div id="maand-waarschuwing" class="overstromings-waarschuwingen"></div>
+  </div>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="/Javascript%20files/Maandoverzicht.js"></script>
+</body>
+</html>

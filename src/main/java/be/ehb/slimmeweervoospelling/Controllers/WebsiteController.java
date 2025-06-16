@@ -17,5 +17,8 @@ public class WebsiteController {
     public String weerPage() {
         return "weer";
     }
+    @GetMapping("/Maandoverzicht")
+    public String Maandoverzicht() {
+        return "Maandoverzicht";
+    }
 }
-

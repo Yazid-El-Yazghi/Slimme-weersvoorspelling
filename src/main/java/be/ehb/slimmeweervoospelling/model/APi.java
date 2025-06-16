@@ -15,18 +15,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Klasse voor het ophalen van neerslaggegevens via externe API's.
- * Bevat methodes om historische en actuele neerslagdata te verkrijgen.
- */
+
 public class APi {
-    /**
-     * Haalt de neerslaggegevens per maand op voor het jaar 2025.
-     * Maakt verbinding met de Meteologix API om de data te verkrijgen.
-     * 
-     * @return Een lijst met neerslaggegevens (in mm) voor elke maand van 2025 tot de huidige maand.
-     *         Retourneert een lege lijst als het huidige jaar voor 2025 is.
-     */
+
     public static List<Double> getNeerslagPerMaand2025() {
         List<Double> maandTotalen = new ArrayList<>();
         try {
@@ -34,24 +25,24 @@ public class APi {
             LocalDate today = LocalDate.now();
             int currentYear = today.getYear();
             if (currentYear < 2025) return maandTotalen;
-            
+
             // Bepaal de laatste maand waarvoor we gegevens hebben
             int laatsteMaand = (currentYear == 2025) ? today.getMonthValue() - 1 : 12;
             if (laatsteMaand < 1) return maandTotalen;
-            
+
             // Loop door elke maand tot de laatst beschikbare maand
             for (int maand = 1; maand <= laatsteMaand; maand++) {
                 YearMonth ym = YearMonth.of(2025, maand);
                 LocalDate start = ym.atDay(1);
                 LocalDate end = ym.atEndOfMonth();
-                
+
                 // Bouw de CQL-filter voor de API-query
                 String cqlFilter = String.format(
                         "code = 6476 AND timestamp DURING %sT00:00:00Z/P%dD",
                         start, end.getDayOfMonth()
                 );
                 String encodedFilter = URLEncoder.encode(cqlFilter, StandardCharsets.UTF_8);
-                
+
                 // Stel de API-URL samen
                 String url = "https://opendata.meteo.be/service/ows" +
                         "?service=wfs" +
@@ -60,19 +51,19 @@ public class APi {
                         "&typeNames=synop:synop_data" +
                         "&outputformat=json" +
                         "&CQL_FILTER=" + encodedFilter;
-                
+
                 // Voer het API-request uit
                 HttpRequest request = HttpRequest.newBuilder()
                         .uri(URI.create(url))
                         .GET()
                         .build();
                 HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-                
+
                 // Verwerk de JSON-respons
                 ObjectMapper mapper = new ObjectMapper();
                 JsonNode root = mapper.readTree(response.body());
                 JsonNode features = root.get("features");
-                
+
                 // Bereken het maandelijkse totaal
                 double maandTotaal = 0.0;
                 for (JsonNode feature : features) {
@@ -82,7 +73,7 @@ public class APi {
                         maandTotaal += neerslagNode.asDouble();
                     }
                 }
-                
+
                 // Rond af op 1 decimaal en voeg toe aan de lijst
                 maandTotalen.add(Math.round(maandTotaal * 10.0) / 10.0);
             }

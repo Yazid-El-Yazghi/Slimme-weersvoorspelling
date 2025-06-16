@@ -21,4 +21,8 @@ public class WebsiteController {
     public String Maandoverzicht() {
         return "Maandoverzicht";
     }
+    @GetMapping("/Kaart")
+    public String Kaart() {
+        return "Kaart";
+    }
 }

@@ -510,3 +510,49 @@ body {
         padding: 0 1rem;
         text-align: left;
     }
+
+    .region-button-group {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 0 1rem;
+    }
+
+    .region-btn {
+        width: 100%;
+        font-size: 1rem;
+        padding: 0.6rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .chart-container {
+        padding: 1.2rem 0.8rem;
+        width: 95%;
+    }
+
+    canvas {
+        width: 100% !important;
+        height: auto !important;
+    }
+
+    .user-table th, .user-table td {
+        font-size: 0.95rem;
+        padding: 0.6em;
+    }
+
+    .welcome-title {
+        font-size: 2rem;
+    }
+
+    .edit-data-form,
+    .alert-settings-form {
+        padding: 1rem 0.8rem;
+    }
+
+    .save-btn,
+    .cancel-btn,
+    .edit-data-btn {
+        width: 100%;
+        margin-top: 0.8rem;
+        padding: 0.7em;
+    }
+}

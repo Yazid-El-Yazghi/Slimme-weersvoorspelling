@@ -22,4 +22,10 @@ public class WebsiteController {
     public String weerPage() {
         return "weer";
     }
+
+    // Maandoverzicht route
+    @GetMapping("/maandoverzicht")
+    public String maandoverzicht() {
+        return "Maandoverzicht";
+    }
 }

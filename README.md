@@ -98,37 +98,6 @@ Het overstromingsrisicoalgoritme gebruikt seizoensgebonden drempelwaarden:
 - **Meteo.be**: `https://opendata.meteo.be/service/ows` (WFS service)
 - **OpenWeatherMap**: `https://openweathermap.org/api`
 
-## Project Structuur
-
-```
-Slimme-weersvoorspelling/
-├── src/
-│   ├── main/
-│   │   ├── java/
-│   │   │   └── be/ehb/slimmeweervoospelling/
-│   │   │       ├── SlimmeWeervoospellingApplication.java
-│   │   │       ├── Controllers/
-│   │   │       │   └── WebsiteController.java
-│   │   │       └── model/
-│   │   │           └── APi.java
-│   │   └── resources/
-│   │       ├── static/
-│   │       │   ├── style.css                # Main styling
-│   │       │   ├── weer.js                  # Weather dashboard logic
-│   │       │   ├── History.js               # Historical data logic
-│   │       │   └── Images/
-│   │       │       └── Logo_Aquafin.png     # Aquafin logo
-│   │       ├── templates/
-│   │       │   ├── weer.html                # Main weather dashboard
-│   │       │   └── History.html             # Historical data page
-│   │       └── application.properties       # Spring Boot configuration
-│   └── test/
-│       └── java/
-│           └── be/ehb/slimmeweervoospelling/
-│               └── SlimmeWeervoospellingApplicationTests.java
-├── pom.xml                                  # Maven dependencies
-└── README.md                                # Project documentation
-```
 
 ## Installatie
 
@@ -158,7 +127,7 @@ mvn spring-boot:run
 
 4. **Applicatie bereiken**
 ```
-http://localhost:1070 en of 8080
+http://localhost:1070
 ```
 
 De applicatie draait standaard op poort 1070 zoals geconfigureerd in `application.properties`.

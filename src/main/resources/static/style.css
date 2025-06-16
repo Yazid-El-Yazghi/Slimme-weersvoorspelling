@@ -501,4 +501,12 @@ body {
         width: 100%;
     }
 
-}
+    .chart-title-style {
+        font-size: 1.2rem;
+        padding: 0 0.5rem;
+    }
+
+    .year-select-container {
+        padding: 0 1rem;
+        text-align: left;
+    }

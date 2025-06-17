@@ -2,7 +2,7 @@
 
 Een intelligente weersvoorspelling applicatie gebouwd met Spring Boot voor het Programming Project. Deze app is ontwikkeld voor Aquafin medewerkers om overstromingsrisico's te monitoren en weersvoorspellingen te bekijken voor heel Vlaanderen.
 
-## Functionaliteiten
+## Voor de eind gebruiker
 
 ### Weersvoorspelling Dashboard
 - Real-time weersvoorspellingen voor 10 grote Vlaamse steden
@@ -24,24 +24,31 @@ Een intelligente weersvoorspelling applicatie gebouwd met Spring Boot voor het P
 - Seizoensgebonden overstromingsanalyse
 - Interactieve jaarSelectie
 - Real-time data voor 2025 via Meteo.be API
+  
+### NeerslagKaart
+- Interactieve Neerslagkaart
+- Toont neerslag informatie
+- Vergroten/verkleinen
+- Toont heel Vlaanderen
 
-### Gemeenten Coverage
+### Huidige weer op jouw locatie
+- Op basis van geolocatie worden gegevens getoond van de dichtstbijzijnde gemeente.
+- Kan gebruikt worden in heel Vlaanderen
+- Locatie gebruiken toestaan
+  
+
+### Grafiek Infromatie
 Ondersteuning voor 10 grote Vlaamse gemeenten:
-- **Antwerpen** (51.2194, 4.4025)
-- **Gent** (51.0536, 3.7304)
-- **Brugge** (51.2093, 3.2247)
-- **Leuven** (50.8798, 4.7005)
-- **Mechelen** (51.0257, 4.4776)
-- **Hasselt** (50.9307, 5.3378)
-- **Kortrijk** (50.8266, 3.2649)
-- **Oostende** (51.2300, 2.9126)
-- **Aalst** (50.9360, 4.0355)
-- **Sint-Niklaas** (51.1651, 4.1431)
-
-### API Integraties
-- **Open-Meteo API**: Real-time weersvoorspellingen
-- **Meteo.be API**: Officiële Belgische weerdata voor historische informatie
-- **Flood Risk Assessment**: Interne algoritmes voor overstromingsrisico
+- **Antwerpen**
+- **Gent**
+- **Brugge**
+- **Leuven**
+- **Mechelen**
+- **Hasselt**
+- **Kortrijk**
+- **Oostende**
+- **Aalst** 
+- **Sint-Niklaas** 
 
 ## Screenshots
 
@@ -55,36 +62,47 @@ De historische pagina toont neerslagdata per maand met seizoensgebonden overstro
 
 ![Historische Data](Screenshots/History.png)
 
-## Technische Implementatie
+## extra features Neerslagkaart
+De NeerslagKaart pagina toont een kaart van Vlaanderen die aantoont waar het zal regenen
+![image](https://github.com/user-attachments/assets/dcd37b1c-f7b5-4cdc-996c-44420e8d643a)
 
-### Backend Architecture
-- **Spring Boot 3.x** - Main application framework
-- **Java 21** - Programming language
-- **Maven** - Dependency management
-- **Thymeleaf** - Template engine voor server-side rendering
-- **Jackson** - JSON parsing voor API responses
-- **HttpClient** - Voor externe API calls
 
-### Models & Data Handling
-- **APi.java** (`src/main/java/be/ehb/slimmeweervoospelling/model/APi.java`) - Meteo.be API integratie
-- **WebsiteController.java** (`src/main/java/be/ehb/slimmeweervoospelling/Controllers/WebsiteController.java`) - Main controller en REST endpoints
+## extra features MaandOverzicht per gemeente
+Voor gebruikers die liever de hele maand voorspelling zien, een grafiek die de hele maand voorspelling heeft.
+![Screenshot 2025-06-17 105849](https://github.com/user-attachments/assets/038bdb63-26fb-4c6f-bed5-a8c2aad6ec57)
 
-#### Data Processing:
-- **Weather Data**: Open-Meteo API voor real-time voorspellingen
-- **Historical Data**: Embedded dataset 2005-2024 + live 2025 data
-- **Flood Risk**: Seizoensgebonden algoritmes met drempelwaarden
+## Voor de Developer
+
+## Backend Architecture
+![Screenshot 2025-06-17 113254](https://github.com/user-attachments/assets/f53043be-0e84-433b-9ac3-0243ea6e9833)
+-**Spring Boot 3.x**
+- **Java**: 21
+- **Javascript**
+- **Maven**: 3.x
+- **Thymeleaf** 
+- **HttpClient**
 
 ### Frontend Implementation
 - **HTML5** met Thymeleaf templating
 - **CSS3** met moderne styling en responsive design
 - **Vanilla JavaScript** voor interactiviteit
-- **Chart.js** voor data visualisatie
+- **Chart.js** externe library voor de grafieken => https://cdn.jsdelivr.net/npm/chart.js
 - **Fetch API** voor asynchrone data loading
 
-### Controllers & Endpoints
+## Models & Data Handling
+- **APi.java** (`src/main/java/be/ehb/slimmeweervoospelling/model/APi.java`) - Meteo.be API integratie
+- **WebsiteController.java** (`src/main/java/be/ehb/slimmeweervoospelling/Controllers/WebsiteController.java`) - Main controller en REST endpoints
+
+## Controllers & Endpoints
 - **WebsiteController** - Hoofdpagina routing (`/`, `/weer`, `/History`)
 - **NeerslagApiController** - REST API voor historische data (`/api/neerslag/2025`)
-- **FloodRiskController** - Overstromingsrisico endpoints (`/flood-risk`)
+- **WeatherController** - Overstromingsrisico endpoints (`/flood-risk`)
+
+
+## gebruikte API's in deze project
+-**Open-Meteo API** : Real-time weervoorspellingen => https://open-meteo.com/
+- **Meteo.be API**: Officiële Belgische weerdata voor historische informatie => https://www.meteo.be/en/brussels
+- **OpenWeatherMap**: Real-time weervoospellingen + diversiteit in kaarten => https://openweathermap.org/api
 
 ### Flood Risk Algorithm
 Het overstromingsrisicoalgoritme gebruikt seizoensgebonden drempelwaarden:
@@ -93,14 +111,7 @@ Het overstromingsrisicoalgoritme gebruikt seizoensgebonden drempelwaarden:
 - **Zomer** (Mei-Jul): 260mm drempel
 - **Herfst** (Aug-Okt): 280mm drempel
 
-### External APIs
-- **Open-Meteo**: `https://api.open-meteo.com/v1/forecast`
-- **Meteo.be**: `https://opendata.meteo.be/service/ows` (WFS service)
-- **OpenWeatherMap**: `https://openweathermap.org/api`
-
-
 ## Installatie
-
 ### Vereisten
 - Java 21 of hoger
 - Maven 3.6+
@@ -132,26 +143,6 @@ http://localhost:1070
 
 De applicatie draait standaard op poort 1070 zoals geconfigureerd in `application.properties`.
 
-## Gebruiksaanwijzing
-
-### Voor Aquafin Medewerkers
-
-1. **Weersvoorspelling bekijken**:
-   - Ga naar de hoofdpagina (`/` of `/weer`)
-   - Selecteer gewenste gemeenten via checkboxes
-   - Bekijk de 7-dagen voorspelling grafiek
-   - Klik "Toon overstromingsgevaar" voor risicoanalyse
-
-2. **Historische data raadplegen**:
-   - Navigeer naar "Historische grafiek"
-   - Selecteer gewenst jaar (2005-2025)
-   - Bekijk maandelijkse neerslagdata
-   - Let op seizoenwaarschuwingen onderaan
-
-3. **Overstromingsrisico interpreteren**:
-   - **Groene labels**: Geen overstromingsgevaar
-   - **Rode labels met ⚠️**: Overstromingsrisico gedetecteerd
-   - Drempelwaarden variëren per seizoen
 
 ## Algoritme Details
 
@@ -189,27 +180,6 @@ if (maandelijkse_neerslag >= seizoen_drempel) {
 | **Async Data Loading** | `weer.js`, `History.js` | Fetch API implementation |
 | **Error Handling** | Try-catch blocks | Graceful API failure handling |
 
-## Extra Features
-
-- **Real-time Updates**: Automatische data refresh voor actuele voorspellingen
-- **Multi-city Support**: Simultane monitoring van meerdere gemeenten
-- **Responsive Design**: Werkt op desktop, tablet en mobiel
-- **Professional Branding**: Aquafin huisstijl en logo integratie
-- **Performant Loading**: Asynchrone API calls voor snelle gebruikerservaring
-- **Error Recovery**: Graceful handling van API failures
-- **Accessibility**: Keyboard navigation en screen reader support
-- **Data Persistence**: Historische data embedded voor offline access
-
-## Gebruikte Technologieën
-
-- **Backend**: Spring Boot 3.x, Java 21, Maven
-- **Frontend**: HTML5, CSS3, Vanilla JavaScript
-- **Data Visualization**: Chart.js
-- **APIs**: Open-Meteo, Meteo.be WFS service
-- **Styling**: Custom CSS met Aquafin kleuren
-- **HTTP Client**: Java native HttpClient
-- **JSON Processing**: Jackson ObjectMapper
-- **Template Engine**: Thymeleaf
 
 ## Team & Context
 
@@ -221,6 +191,7 @@ if (maandelijkse_neerslag >= seizoen_drempel) {
 **Academiejaar**: 2024-2025  
 **Hogeschool**: Erasmushogeschool Brussel
 
+
 ## Gebruikte Bronnen
 
 - [Spring Boot Documentation](https://spring.io/projects/spring-boot)
@@ -229,15 +200,8 @@ if (maandelijkse_neerslag >= seizoen_drempel) {
 - [Chart.js Documentation](https://www.chartjs.org/docs/)
 - [Thymeleaf Documentation](https://www.thymeleaf.org/documentation.html)
 - AI Assistants:
-  - GitHub Copilot voor code suggestions en debugging tijdens development
-  - ChatGPT voor algoritme optimalisatie en documentatie
+- GitHub Copilot voor code suggestions en debugging tijdens development
+- ChatGPT voor algoritme optimalisatie en documentatie
 
-## Aquafin Context
-
-Aquafin is verantwoordelijk voor waterzuivering en waterbeheersing in Vlaanderen. Deze applicatie ondersteunt hun medewerkers bij:
-- **Preventieve monitoring** van overstromingsrisico's
-- **Operationele planning** gebaseerd op weersvoorspellingen  
-- **Risicobeoordeling** voor infrastructuur en waterbeheersing
-- **Data-driven besluitvorming** voor interventies
 
 ---

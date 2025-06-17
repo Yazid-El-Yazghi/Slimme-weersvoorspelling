@@ -25,13 +25,13 @@ Een intelligente weersvoorspelling applicatie gebouwd met Spring Boot voor het P
 - Interactieve jaarSelectie
 - Real-time data voor 2025 via Meteo.be API
   
-- ### NeerslagKaart
+### NeerslagKaart
 - Interactieve Neerslagkaart
 - Toont neerslag informatie
 - Vergroten/verkleinen
 - Toont heel Vlaanderen
 
-- ### Huidige weer op jouw locatie
+### Huidige weer op jouw locatie
 - Op basis van geolocatie worden gegevens getoond van de dichtstbijzijnde gemeente.
 - Kan gebruikt worden in heel Vlaanderen
 - Locatie gebruiken toestaan

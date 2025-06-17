@@ -74,19 +74,19 @@ Voor gebruikers die liever de hele maand voorspelling zien, een grafiek die de h
 ## Voor de Developer
 
 ## Backend Architecture
+![Screenshot 2025-06-17 113254](https://github.com/user-attachments/assets/f53043be-0e84-433b-9ac3-0243ea6e9833)
 -**Spring Boot 3.x**
-- **Java 21**
+- **Java**: 21
 - **Javascript**
-- **Maven**
-- **Thymeleaf**
-- **Jackson** 
+- **Maven**: 3.x
+- **Thymeleaf** 
 - **HttpClient**
 
 ### Frontend Implementation
 - **HTML5** met Thymeleaf templating
 - **CSS3** met moderne styling en responsive design
 - **Vanilla JavaScript** voor interactiviteit
-- **Chart.js** externe library voor de grafieken
+- **Chart.js** externe library voor de grafieken => https://cdn.jsdelivr.net/npm/chart.js
 - **Fetch API** voor asynchrone data loading
 
 ## Models & Data Handling

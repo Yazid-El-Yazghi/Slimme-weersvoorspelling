@@ -19,11 +19,8 @@
     </div>
 </nav>
 
-<!--overstromingsgevaren schrijven als + en - -. als het + is tonen waar het is en wat het is en - om te minimizen.-->
 <h2 class="grafiek-titel">Meldingen overstromingsgevaar</h2>
 <div class="overstromings-waarschuwingen" id="alle-overstromings-waarschuwingen"></div>
-
-
 
 <div class="huidig-weer-container" id="huidig-weer-container">
     <h2>Huidig weer op jouw locatie</h2>
@@ -40,18 +37,19 @@
 <div class="jaar-selectie-container">
     <label class="jaar-selectie-label">Kies gemeenten:</label>
     <span id="gemeente-checkboxes">
-            <label><input type="checkbox" value="51.2194,4.4025" checked> Antwerpen</label>
-            <label><input type="checkbox" value="51.0536,3.7304"> Gent</label>
-            <label><input type="checkbox" value="51.2093,3.2247"> Brugge</label>
-            <label><input type="checkbox" value="50.8798,4.7005"> Leuven</label>
-            <label><input type="checkbox" value="51.0257,4.4776"> Mechelen</label>
-            <label><input type="checkbox" value="50.9307,5.3378"> Hasselt</label>
-            <label><input type="checkbox" value="50.8266,3.2649"> Kortrijk</label>
-            <label><input type="checkbox" value="51.2300,2.9126"> Oostende</label>
-            <label><input type="checkbox" value="50.9360,4.0355"> Aalst</label>
-            <label><input type="checkbox" value="51.1651,4.1431"> Sint-Niklaas</label>
-        </span>
+        <label><input type="checkbox" value="51.2194,4.4025" checked> Antwerpen</label>
+        <label><input type="checkbox" value="51.0536,3.7304"> Gent</label>
+        <label><input type="checkbox" value="51.2093,3.2247"> Brugge</label>
+        <label><input type="checkbox" value="50.8798,4.7005"> Leuven</label>
+        <label><input type="checkbox" value="51.0257,4.4776"> Mechelen</label>
+        <label><input type="checkbox" value="50.9307,5.3378"> Hasselt</label>
+        <label><input type="checkbox" value="50.8266,3.2649"> Kortrijk</label>
+        <label><input type="checkbox" value="51.2300,2.9126"> Oostende</label>
+        <label><input type="checkbox" value="50.9360,4.0355"> Aalst</label>
+        <label><input type="checkbox" value="51.1651,4.1431"> Sint-Niklaas</label>
+    </span>
 </div>
+
 <div class="grafiek-container">
     <canvas id="voorspellingGrafiek" width="800" height="400"></canvas>
 </div>
@@ -60,7 +58,6 @@
 <script src="/Javascript%20files/weer.js"></script>
 <script src="/Javascript%20files/huidigWeer.js"></script>
 <script>
-    // Toon flood warnings van alle gemeenten direct bij laden
     window.addEventListener('DOMContentLoaded', async function() {
         const gemeenten = [
             { naam: "Antwerpen", lat: 51.2194, lon: 4.4025 },
@@ -91,7 +88,11 @@
         }));
         waarschuwingenDiv.innerHTML = results.join('');
     });
-
 </script>
+
+<footer style="background-color: #1976d2; color: white; text-align: center; padding: 1rem 0; margin-top: 3rem; font-size: 1rem;">
+    Project Groep 5 – SimmeWeerVoorspelling
+</footer>
+
 </body>
 </html>

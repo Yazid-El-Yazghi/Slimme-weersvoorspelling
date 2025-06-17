@@ -1,19 +1,91 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <title>Vlaanderen Neerslagkaart</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/style/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/style/style.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
-        #map { height: 600px; width: 90vw; max-width: 900px; margin: 2rem auto; border-radius: 12px; }
+        #map {
+            height: 60vh;
+            width: 90vw;
+            max-width: 900px;
+            margin: 2rem auto;
+            border-radius: 12px;
+        }
+
+        .kaart-titel {
+            text-align: center;
+            color: #1976d2;
+            margin-top: 2rem;
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+            font-weight: bold;
+            text-decoration: underline;
+        }
+
+        .kaart-beschrijving {
+            text-align: center;
+            max-width: 800px;
+            margin: 1.5rem auto;
+            font-size: 1rem;
+            color: #444;
+            padding: 0 1rem;
+        }
+
+        .animatie-knop {
+            display: block;
+            margin: 1rem auto;
+            padding: 0.75rem 1.5rem;
+            font-size: 1.1rem;
+            background-color: #1976d2;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            max-width: 90%;
+        }
+
+        .animatie-knop:hover {
+            background-color: #155ca2;
+        }
+
+        footer {
+            background-color: #1976d2;
+            color: white;
+            text-align: center;
+            padding: 1rem 0;
+            margin-top: 3rem;
+            font-size: 1rem;
+        }
+
+        @media (max-width: 600px) {
+            .kaart-titel {
+                font-size: 1.5rem;
+            }
+
+            .kaart-beschrijving {
+                font-size: 0.95rem;
+            }
+
+            .animatie-knop {
+                font-size: 1rem;
+                padding: 0.6rem 1.2rem;
+            }
+
+            footer {
+                font-size: 0.9rem;
+                padding: 1rem;
+            }
+        }
     </style>
 </head>
+
 <body>
 <nav class="navigatiebalk">
     <div class="navigatiebalk-logo">
-        <a href="/"><img src="/Images/Logo_Aquafin.png" alt="Bedrijfslogo" class="bedrijfslogo"></a>
+        <a href="/"><img src="/Images/Logo_Aquafin.png" alt="Bedrijfslogo" class="bedrijfslogo" /></a>
     </div>
     <div class="navigatiebalk-rechts">
         <a href="/weer" class="nav-link nav-knop">Weer voorspelling</a>
@@ -23,34 +95,74 @@
     </div>
 </nav>
 
+<h2 class="kaart-titel">NeerslagKaart</h2>
+
 <div id="map"></div>
+
+<p class="kaart-beschrijving">
+    Deze kaart toont een geanimeerd overzicht van de neerslag in België over de afgelopen 2 uur.
+</p>
+
+<button class="animatie-knop" onclick="startAnimatie()">▶️ Start Animatie</button>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-    // Vlaanderen-bounds: ongeveer zuidwest (50.67, 2.54), noordoost (51.51, 5.92)
-    var vlaanderenBounds = [
-        [50.67, 2.54],[51.51, 5.92]
-    ];
-    //Zoomniveau 7-10 voor Vlaanderen
-    var map = L.map('map', {
-        minZoom: 7,
-        maxZoom: 10,
-        maxBounds: vlaanderenBounds,
-        maxBoundsViscosity: 1.0
-    }).setView([51.0, 4.5], 8);
-
+    const map = L.map('map').setView([51.0, 4.5], 8);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 18,
-        attribution: 'OpenStreetMap'
+        attribution: '© OpenStreetMap'
     }).addTo(map);
 
-    L.tileLayer('https://tile.openweathermap.org/map/precipitation_new/{z}/{x}/{y}.png?appid=441b571414041bb2360e7f9131e3afc4', {
-        maxZoom: 10,
-        minZoom: 7,
-        opacity: 0.6,
-        attribution: 'OpenWeatherMap'
-    }).addTo(map);
+    let radarFrames = [];
+    let radarLayers = [];
+    let currentFrame = 0;
+    let animatieInterval = null;
+
+    fetch("https://api.rainviewer.com/public/weather-maps.json")
+        .then(response => response.json())
+        .then(data => {
+            const host = data.host;
+            const frames = data.radar.past;
+            const color = 3;
+            const smooth = 1;
+            const snow = 0;
+            const size = 256;
+
+            radarFrames = frames.map(f => {
+                const path = f.path;
+                return L.tileLayer(`${host}${path}/${size}/{z}/{x}/{y}/${color}/${smooth}_${snow}.png`, {
+                    tileSize: size,
+                    opacity: 0.6,
+                    attribution: 'Radar data © RainViewer'
+                });
+            });
+
+            if (radarFrames.length > 0) {
+                radarLayers = radarFrames;
+                radarLayers[radarLayers.length - 1].addTo(map); // laatste frame
+            }
+        });
+
+    function startAnimatie() {
+        if (radarLayers.length === 0) return;
+
+        if (animatieInterval) clearInterval(animatieInterval);
+
+        radarLayers.forEach(layer => map.removeLayer(layer));
+        currentFrame = 0;
+
+        animatieInterval = setInterval(() => {
+            radarLayers.forEach(layer => map.removeLayer(layer));
+            radarLayers[currentFrame].addTo(map);
+            currentFrame = (currentFrame + 1) % radarLayers.length;
+        }, 800);
+    }
 </script>
+
+<footer>
+    Project Groep 5 – SimmeWeerVoorspelling
+</footer>
 </body>
 </html>
+

@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="/Style/style.css">
 </head>
 <body>
+
 <nav class="navigatiebalk">
   <div class="navigatiebalk-logo">
     <a href="/"><img src="/Images/Logo_Aquafin.png" alt="Bedrijfslogo" class="bedrijfslogo"></a>
@@ -17,6 +18,7 @@
     <a href="/Kaart" class="nav-link nav-knop">NeerslagKaart</a>
   </div>
 </nav>
+
 <main>
   <div class="grafiek-header">
     <h1 class="grafiek-titel">Neerslag maand juni - <span id="maand-naam"></span> <span id="jaar"></span></h1>
@@ -36,12 +38,19 @@
       </select>
     </div>
   </div>
+
   <div class="grafiek-container">
     <canvas id="maandGrafiek" width="900" height="400"></canvas>
     <div id="maand-waarschuwing" class="overstromings-waarschuwingen"></div>
   </div>
 </main>
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="/Javascript%20files/Maandoverzicht.js"></script>
+
+<footer style="background-color: #1976d2; color: white; text-align: center; padding: 1rem 0; margin-top: 3rem; font-size: 1rem;">
+  Project Groep 5 – SimmeWeerVoorspelling
+</footer>
+
 </body>
 </html>

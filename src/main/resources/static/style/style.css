@@ -530,3 +530,194 @@ body {
         margin-right: 1rem;
     }
 }
+
+/* Mobielvriendelijke stijlen voor de neerslagkaart en footer */
+#map {
+    height: 60vh;
+    width: 90vw;
+    max-width: 900px;
+    margin: 2rem auto;
+    border-radius: 12px;
+}
+
+.kaart-titel {
+    text-align: center;
+    color: #1976d2;
+    margin-top: 2rem;
+    margin-bottom: 1.5rem;
+    font-size: 2rem;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+.kaart-beschrijving {
+    text-align: center;
+    max-width: 800px;
+    margin: 1.5rem auto;
+    font-size: 1rem;
+    color: #444;
+    padding: 0 1rem;
+}
+
+.animatie-knop {
+    display: block;
+    margin: 1rem auto;
+    padding: 0.75rem 1.5rem;
+    font-size: 1.1rem;
+    background-color: #1976d2;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    max-width: 90%;
+}
+
+.animatie-knop:hover {
+    background-color: #155ca2;
+}
+
+footer {
+    background-color: #1976d2;
+    color: white;
+    text-align: center;
+    padding: 1rem 0;
+    margin-top: 3rem;
+    font-size: 1rem;
+}
+
+@media (max-width: 600px) {
+    .kaart-titel {
+        font-size: 1.5rem;
+    }
+    .kaart-beschrijving {
+        font-size: 0.95rem;
+    }
+    .animatie-knop {
+        font-size: 1rem;
+        padding: 0.6rem 1.2rem;
+    }
+    footer {
+        font-size: 0.9rem;
+        padding: 1rem;
+    }
+}
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background: #f6f8fa;
+}
+
+.navigatiebalk {
+    width: 100%;
+    background: linear-gradient(90deg, #1976d2 0%, #4fc3f7 100%);
+    padding: 1rem 0;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+}
+
+.navigatiebalk-logo {
+    color: #fff;
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-left: 2rem;
+    letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+}
+
+.bedrijfslogo {
+    height: 44px;
+    width: auto;
+    display: block;
+}
+
+.navigatiebalk-rechts {
+    display: flex;
+    gap: 1rem;
+    margin-right: 2rem;
+    position: static;
+    top: unset;
+    right: unset;
+}
+
+.nav-link {
+    color: #fff;
+    text-decoration: none;
+    margin-left: 2rem;
+    font-size: 1.1rem;
+    transition: color 0.2s;
+}
+
+.nav-link:hover {
+    color: #4fc3f7;
+}
+
+.nav-link.nav-knop {
+    background: #fff;
+    color: #1976d2;
+    border: none;
+    border-radius: 22px;
+    padding: 0.6rem 1.6rem;
+    font-size: 1.1rem;
+    font-weight: 500;
+    text-decoration: none;
+    margin-left: 0;
+    box-shadow: 0 1px 4px rgba(25,118,210,0.07);
+    transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+    outline: none;
+    display: inline-block;
+}
+
+.nav-link.nav-knop:hover {
+    background: #1976d2;
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(25,118,210,0.15);
+}
+
+footer {
+    background-color: #1976d2;
+    color: white;
+    text-align: center;
+    padding: 1rem 0;
+    margin-top: 3rem;
+    font-size: 1rem;
+}
+
+@media (max-width: 600px) {
+    .kaart-titel {
+        font-size: 1.5rem;
+    }
+    .kaart-beschrijving {
+        font-size: 0.95rem;
+    }
+    .animatie-knop {
+        font-size: 1rem;
+        padding: 0.6rem 1.2rem;
+    }
+    footer {
+        font-size: 0.9rem;
+        padding: 1rem;
+    }
+    .navigatiebalk {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 0.5rem 1rem;
+    }
+    .navigatiebalk-rechts {
+        flex-direction: column;
+        align-items: flex-start;
+        width: 100%;
+        margin: 0;
+        gap: 0.5rem;
+    }
+    .nav-link.nav-knop {
+        width: 100%;
+        text-align: center;
+        padding: 0.5rem 1rem;
+        font-size: 1rem;
+    }
+}

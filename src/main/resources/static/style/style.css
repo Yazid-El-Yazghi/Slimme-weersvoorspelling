@@ -906,3 +906,43 @@ canvas {
         box-shadow: none;
     }
 }
+@media (max-width: 600px) {
+    .navigatiebalk-logo {
+        width: 100%;
+        justify-content: center;
+        margin-left: 0;
+        margin-bottom: 0.5rem;
+    }
+
+    .bedrijfslogo {
+        margin: 0 auto;
+    }
+}
+@media (max-width: 600px) {
+    .navigatiebalk {
+        flex-direction: column;
+        align-items: center;
+        padding: 0.5rem 1rem;
+    }
+
+    .navigatiebalk-logo {
+        margin: 0 auto 0.5rem auto;
+    }
+
+    .navigatiebalk-rechts {
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        gap: 0.5rem;
+    }
+
+    .nav-link.nav-knop {
+        width: 85%;
+        max-width: 280px;
+        text-align: center;
+        padding: 0.5rem 1rem;
+        font-size: 1rem;
+        border-radius: 12px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+}

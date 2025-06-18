@@ -196,6 +196,7 @@ if (maandelijkse_neerslag >= seizoen_drempel) {
 
 - [Spring Boot Documentation](https://spring.io/projects/spring-boot)
 - [Open-Meteo API Documentation](https://open-meteo.com/en/docs)
+- [OpenWeatherMap Api Documentation](https://openweathermap.org/api)
 - [Meteo.be Open Data](https://opendata.meteo.be/)
 - [Chart.js Documentation](https://www.chartjs.org/docs/)
 - [Thymeleaf Documentation](https://www.thymeleaf.org/documentation.html)

@@ -691,22 +691,27 @@ footer {
     .kaart-titel {
         font-size: 1.5rem;
     }
+
     .kaart-beschrijving {
         font-size: 0.95rem;
     }
+
     .animatie-knop {
         font-size: 1rem;
         padding: 0.6rem 1.2rem;
     }
+
     footer {
         font-size: 0.9rem;
         padding: 1rem;
     }
+
     .navigatiebalk {
         flex-direction: column;
         align-items: flex-start;
         padding: 0.5rem 1rem;
     }
+
     .navigatiebalk-rechts {
         flex-direction: column;
         align-items: flex-start;
@@ -714,10 +719,230 @@ footer {
         margin: 0;
         gap: 0.5rem;
     }
+
     .nav-link.nav-knop {
         width: 100%;
         text-align: center;
         padding: 0.5rem 1rem;
         font-size: 1rem;
+    }
+
+}
+
+
+.huidig-weer-container {
+    max-width: 960px;
+    margin: 2rem auto;
+    padding: 1rem;
+    background: #fff;
+    border: 1px solid #1976d2;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(25, 118, 210, 0.1);
+    text-align: center;
+}
+
+#weather-data {
+    margin-top: 1rem;
+    text-align: left;
+}
+
+#gemeente-checkboxes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+    justify-content: center;
+    margin-top: 0.5rem;
+}
+
+#gemeente-checkboxes label {
+    display: inline-block;
+    font-size: 1rem;
+}
+
+@media (max-width: 768px) {
+    .grafiek-titel {
+        font-size: 1.5rem;
+        text-align: center;
+    }
+
+    .jaar-selectie-container {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 0 1rem;
+    }
+
+    .jaar-selectie-label {
+        display: block;
+        margin-bottom: 0.5rem;
+    }
+
+    #gemeente-checkboxes label {
+        width: 45%;
+        font-size: 0.95rem;
+    }
+
+    .blauwe-knop {
+        font-size: 1rem;
+        padding: 0.6rem 1.2rem;
+    }
+
+    #weather-data {
+        text-align: center;
+    }
+
+    canvas {
+        width: 100% !important;
+        height: auto !important;
+    }
+}
+
+/* Inhoudelijke containers responsief centreren */
+.huidig-weer-container,
+.grafiek-container,
+.jaar-selectie-container {
+    max-width: 960px;
+    margin: 0 auto 2rem auto;
+    padding: 1rem;
+    box-sizing: border-box;
+}
+
+/* Gemeente checkbox selectie layout */
+#gemeente-checkboxes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+    justify-content: center;
+    margin-top: 0.5rem;
+}
+
+#gemeente-checkboxes label {
+    display: inline-block;
+    font-size: 1rem;
+}
+
+/* Grafiek canvas adaptief */
+canvas {
+    width: 100% !important;
+    height: auto !important;
+}
+
+/* Responsieve typografie en buttons */
+@media (max-width: 768px) {
+    .grafiek-titel {
+        font-size: 1.5rem;
+        text-align: center;
+    }
+
+    .jaar-selectie-container {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 0 1rem;
+    }
+
+    .jaar-selectie-label {
+        display: block;
+        margin-bottom: 0.5rem;
+    }
+
+    #gemeente-checkboxes label {
+        width: 45%;
+        font-size: 0.95rem;
+    }
+
+    .blauwe-knop {
+        font-size: 1rem;
+        padding: 0.6rem 1.2rem;
+    }
+
+    #weather-data {
+        text-align: center;
+    }
+}
+.flood-warning-label,
+.overstroming-veilig-label {
+    padding: 0.4em 0.8em;
+    font-size: 1rem;
+    margin: 0.4rem auto;
+    width: 95%;
+    line-height: 1.4;
+    word-wrap: break-word;
+    border-radius: 6px;
+}
+
+@media (max-width: 600px) {
+    .overstromings-waarschuwingen {
+        padding: 0 1rem;
+    }
+
+    .flood-warning-label,
+    .overstroming-veilig-label {
+        font-size: 0.95rem;
+        padding: 0.5rem 0.7rem;
+    }
+}
+@media (max-width: 600px) {
+    .navigatiebalk {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 0.5rem 1rem;
+    }
+
+    .navigatiebalk-rechts {
+        flex-direction: column;
+        align-items: stretch;
+        width: 100%;
+        margin: 0;
+        gap: 0.3rem;
+    }
+
+    .nav-link.nav-knop {
+        width: 100%;
+        text-align: center;
+        padding: 0.4rem 0.8rem;
+        font-size: 1rem;
+        border-radius: 10px;
+        box-shadow: none;
+    }
+}
+@media (max-width: 600px) {
+    .navigatiebalk-logo {
+        width: 100%;
+        justify-content: center;
+        margin-left: 0;
+        margin-bottom: 0.5rem;
+    }
+
+    .bedrijfslogo {
+        margin: 0 auto;
+    }
+}
+@media (max-width: 600px) {
+    .navigatiebalk {
+        flex-direction: column;
+        align-items: center;
+        padding: 0.5rem 1rem;
+    }
+
+    .navigatiebalk-logo {
+        margin: 0 auto 0.5rem auto;
+    }
+
+    .navigatiebalk-rechts {
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        gap: 0.5rem;
+    }
+
+    .nav-link.nav-knop {
+        width: 85%;
+        max-width: 280px;
+        text-align: center;
+        padding: 0.5rem 1rem;
+        font-size: 1rem;
+        border-radius: 12px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
     }
 }

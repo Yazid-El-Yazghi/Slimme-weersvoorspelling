@@ -6,80 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="/style/style.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <style>
-        #map {
-            height: 60vh;
-            width: 90vw;
-            max-width: 900px;
-            margin: 2rem auto;
-            border-radius: 12px;
-        }
-
-        .kaart-titel {
-            text-align: center;
-            color: #1976d2;
-            margin-top: 2rem;
-            margin-bottom: 1.5rem;
-            font-size: 2rem;
-            font-weight: bold;
-            text-decoration: underline;
-        }
-
-        .kaart-beschrijving {
-            text-align: center;
-            max-width: 800px;
-            margin: 1.5rem auto;
-            font-size: 1rem;
-            color: #444;
-            padding: 0 1rem;
-        }
-
-        .animatie-knop {
-            display: block;
-            margin: 1rem auto;
-            padding: 0.75rem 1.5rem;
-            font-size: 1.1rem;
-            background-color: #1976d2;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            max-width: 90%;
-        }
-
-        .animatie-knop:hover {
-            background-color: #155ca2;
-        }
-
-        footer {
-            background-color: #1976d2;
-            color: white;
-            text-align: center;
-            padding: 1rem 0;
-            margin-top: 3rem;
-            font-size: 1rem;
-        }
-
-        @media (max-width: 600px) {
-            .kaart-titel {
-                font-size: 1.5rem;
-            }
-
-            .kaart-beschrijving {
-                font-size: 0.95rem;
-            }
-
-            .animatie-knop {
-                font-size: 1rem;
-                padding: 0.6rem 1.2rem;
-            }
-
-            footer {
-                font-size: 0.9rem;
-                padding: 1rem;
-            }
-        }
-    </style>
 </head>
 
 <body>
@@ -94,15 +20,21 @@
     </div>
 </nav>
 
-<h2 class="kaart-titel">NeerslagKaart</h2>
+<main>
+    <h2 class="kaart-titel">NeerslagKaart</h2>
 
-<div id="map"></div>
+    <div id="map"></div>
 
-<p class="kaart-beschrijving">
-    Deze kaart toont een geanimeerd overzicht van de neerslag in België over de afgelopen 2 uur.
-</p>
+    <p class="kaart-beschrijving">
+        Deze kaart toont een geanimeerd overzicht van de neerslag in België over de afgelopen 2 uur.
+    </p>
 
-<button class="animatie-knop" onclick="startAnimatie()">▶️ Start Animatie</button>
+    <button class="animatie-knop" onclick="startAnimatie()">▶️ Start Animatie</button>
+</main>
+
+<footer>
+    Project Groep 5 – SimmeWeerVoorspelling
+</footer>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
@@ -139,7 +71,7 @@
 
             if (radarFrames.length > 0) {
                 radarLayers = radarFrames;
-                radarLayers[radarLayers.length - 1].addTo(map); // laatste frame
+                radarLayers[radarLayers.length - 1].addTo(map);
             }
         });
 
@@ -158,10 +90,5 @@
         }, 800);
     }
 </script>
-
-<footer>
-    Project Groep 5 – SimmeWeerVoorspelling
-</footer>
 </body>
 </html>
-

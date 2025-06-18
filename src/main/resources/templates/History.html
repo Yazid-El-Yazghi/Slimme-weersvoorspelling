@@ -19,16 +19,17 @@
 
         @media (max-width: 768px) {
             .jaar-selectie-container {
+                display: flex;
                 flex-direction: column;
                 align-items: center;
                 text-align: center;
+                gap: 0.5rem;
             }
 
             .jaar-selectie-label,
             .jaar-selectie {
-                display: block;
                 width: 100%;
-                margin-bottom: 0.5rem;
+                max-width: 300px;
             }
         }
     </style>
@@ -65,7 +66,7 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="/Javascript%20files/History.js"></script>
 
-<footer style="background-color: #1976d2; color: white; text-align: center; padding: 1rem 0; margin-top: 3rem; font-size: 1rem;">
+<footer>
     Project Groep 5 – SimmeWeerVoorspelling
 </footer>
 

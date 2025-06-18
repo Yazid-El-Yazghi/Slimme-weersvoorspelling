@@ -5,6 +5,44 @@
   <title>Maandoverzicht</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="/Style/style.css">
+  <style>
+    main {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 1rem;
+      box-sizing: border-box;
+    }
+
+    canvas {
+      width: 100% !important;
+      height: auto !important;
+    }
+
+    @media (max-width: 768px) {
+      .grafiek-titel {
+        font-size: 1.5rem;
+        text-align: center;
+      }
+
+      .jaar-selectie-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 0.5rem;
+        padding: 0 1rem;
+      }
+
+      .jaar-selectie {
+        width: 100%;
+        max-width: 300px;
+      }
+
+      select {
+        width: 100%;
+      }
+    }
+  </style>
 </head>
 <body>
 
@@ -48,7 +86,7 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="/Javascript%20files/Maandoverzicht.js"></script>
 
-<footer style="background-color: #1976d2; color: white; text-align: center; padding: 1rem 0; margin-top: 3rem; font-size: 1rem;">
+<footer>
   Project Groep 5 – SimmeWeerVoorspelling
 </footer>
 

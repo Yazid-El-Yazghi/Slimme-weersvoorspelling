@@ -88,6 +88,7 @@ Voor gebruikers die liever de hele maand voorspelling zien, een grafiek die de h
 - **Vanilla JavaScript** voor interactiviteit
 - **Chart.js** externe library voor de grafieken => https://cdn.jsdelivr.net/npm/chart.js
 - **Fetch API** voor asynchrone data loading
+- **Leaflet JS** voor de kaart
 
 ## Models & Data Handling
 - **APi.java** (`src/main/java/be/ehb/slimmeweervoospelling/model/APi.java`) - Meteo.be API integratie
@@ -199,6 +200,7 @@ if (maandelijkse_neerslag >= seizoen_drempel) {
 - [OpenWeatherMap Api Documentation](https://openweathermap.org/api)
 - [Meteo.be Open Data](https://opendata.meteo.be/)
 - [Chart.js Documentation](https://www.chartjs.org/docs/)
+- [Leaflets Documentation](https://unpkg.com/leaflet@1.9.4/dist/leaflet.js)
 - [Thymeleaf Documentation](https://www.thymeleaf.org/documentation.html)
 - AI Assistants:
 - GitHub Copilot voor code suggestions en debugging tijdens development

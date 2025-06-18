@@ -48,6 +48,7 @@ public class WeatherService {
                     "Zomer", List.of(Month.JUNE, Month.JULY, Month.AUGUST),
                     "Herfst", List.of(Month.SEPTEMBER, Month.OCTOBER, Month.NOVEMBER)
             );
+            // Zet de standaard drempels terug (geen -1 meer)
             Map<String, Integer> thresholds = Map.of(
                     "Winter", 300,
                     "Lente", 250,

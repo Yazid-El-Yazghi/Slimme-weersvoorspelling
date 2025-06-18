@@ -20,8 +20,10 @@ function getDatumString(offsetDagen) {
 }
 
 function haalVoorspellingOp(lat, lon) {
+    // Startdatum: vandaag
     const startDatum = getDatumString(0);
-    const eindDatum = getDatumString(7);
+    // Einddatum: hardcoded naar 2025-06-26 (inclusief deze dag)
+    const eindDatum = "2025-06-26";
     const apiUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}`
         + `&daily=precipitation_sum,precipitation_probability_max,windspeed_10m_max,temperature_2m_max,temperature_2m_min`
         + `&timezone=Europe%2FBerlin&start_date=${startDatum}&end_date=${eindDatum}`;
@@ -29,14 +31,30 @@ function haalVoorspellingOp(lat, lon) {
     return fetch(apiUrl)
         .then(response => response.json())
         .then(data => {
-            const dagen = data.daily.time;
+            // Controleer of de laatste dag 2025-06-26 is, zo niet, voeg een lege waarde toe
+            let dagen = data.daily.time;
+            let neerslag = data.daily.precipitation_sum;
+            let neerslagkans = data.daily.precipitation_probability_max;
+            let windsnelheid = data.daily.windspeed_10m_max;
+            let temp_max = data.daily.temperature_2m_max;
+            let temp_min = data.daily.temperature_2m_min;
+
+            if (dagen[dagen.length - 1] !== "2025-06-26") {
+                dagen.push("2025-06-26");
+                neerslag.push(null);
+                neerslagkans.push(null);
+                windsnelheid.push(null);
+                temp_max.push(null);
+                temp_min.push(null);
+            }
+
             return {
                 dagen: dagen,
-                neerslag: data.daily.precipitation_sum,
-                neerslagkans: data.daily.precipitation_probability_max,
-                windsnelheid: data.daily.windspeed_10m_max,
-                temp_max: data.daily.temperature_2m_max,
-                temp_min: data.daily.temperature_2m_min
+                neerslag: neerslag,
+                neerslagkans: neerslagkans,
+                windsnelheid: windsnelheid,
+                temp_max: temp_max,
+                temp_min: temp_min
             };
         });
 }

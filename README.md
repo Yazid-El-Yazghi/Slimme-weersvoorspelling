@@ -88,7 +88,7 @@ Voor gebruikers die liever de hele maand voorspelling zien, een grafiek die de h
 - **Vanilla JavaScript** voor interactiviteit
 - **Chart.js** externe library voor de grafieken => https://cdn.jsdelivr.net/npm/chart.js
 - **Fetch API** voor asynchrone data loading
-- **Leaflet JS** voor de kaart
+- **Leaflet JS** voor de kaart => https://unpkg.com/leaflet@1.9.4/dist/leaflet.js
 
 ## Models & Data Handling
 - **APi.java** (`src/main/java/be/ehb/slimmeweervoospelling/model/APi.java`) - Meteo.be API integratie

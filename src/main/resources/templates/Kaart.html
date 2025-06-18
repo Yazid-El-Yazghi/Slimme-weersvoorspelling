@@ -9,6 +9,7 @@
 </head>
 
 <body>
+<!--Algemene navigatiebalk -->
 <nav class="navigatiebalk">
     <div class="navigatiebalk-logo">
         <a href="/"><img src="/Images/Logo_Aquafin.png" alt="Bedrijfslogo" class="bedrijfslogo" /></a>
@@ -16,19 +17,19 @@
     <div class="navigatiebalk-rechts">
         <a href="/weer" class="nav-link nav-knop">Weersverwachting</a>
         <a href="/History" class="nav-link nav-knop">Historische gegevensgrafiek</a>
-        <a href="/Maandoverzicht" class="nav-link nav-knop">Overzicht van de maand</a>
+        <a href="/Maandoverzicht" class="nav-link nav-knop">Maandoverzicht</a>
     </div>
 </nav>
 
 <main>
     <h2 class="kaart-titel">NeerslagKaart</h2>
-
+    <!-- Kaartcontainer -->
     <div id="map"></div>
-
+    <!-- Beschrijving onder de kaart -->
     <p class="kaart-beschrijving">
         Deze kaart toont een geanimeerd overzicht van de neerslag in België over de afgelopen 2 uur.
     </p>
-
+    <!--Knop voor een dynamische kaart-->
     <button class="animatie-knop" onclick="startAnimatie()">▶️ Start Animatie</button>
 </main>
 
@@ -36,59 +37,8 @@
     Project Groep 5 – SimmeWeerVoorspelling
 </footer>
 
+<!-- Leaflet JS library -->
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script>
-    const map = L.map('map').setView([51.0, 4.5], 8);
-
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 18,
-        attribution: '© OpenStreetMap'
-    }).addTo(map);
-
-    let radarFrames = [];
-    let radarLayers = [];
-    let currentFrame = 0;
-    let animatieInterval = null;
-
-    fetch("https://api.rainviewer.com/public/weather-maps.json")
-        .then(response => response.json())
-        .then(data => {
-            const host = data.host;
-            const frames = data.radar.past;
-            const color = 3;
-            const smooth = 1;
-            const snow = 0;
-            const size = 256;
-
-            radarFrames = frames.map(f => {
-                const path = f.path;
-                return L.tileLayer(`${host}${path}/${size}/{z}/{x}/{y}/${color}/${smooth}_${snow}.png`, {
-                    tileSize: size,
-                    opacity: 0.6,
-                    attribution: 'Radar data © RainViewer'
-                });
-            });
-
-            if (radarFrames.length > 0) {
-                radarLayers = radarFrames;
-                radarLayers[radarLayers.length - 1].addTo(map);
-            }
-        });
-
-    function startAnimatie() {
-        if (radarLayers.length === 0) return;
-
-        if (animatieInterval) clearInterval(animatieInterval);
-
-        radarLayers.forEach(layer => map.removeLayer(layer));
-        currentFrame = 0;
-
-        animatieInterval = setInterval(() => {
-            radarLayers.forEach(layer => map.removeLayer(layer));
-            radarLayers[currentFrame].addTo(map);
-            currentFrame = (currentFrame + 1) % radarLayers.length;
-        }, 800);
-    }
-</script>
+<script src="/Javascript files/kaart.js"></script>
 </body>
 </html>

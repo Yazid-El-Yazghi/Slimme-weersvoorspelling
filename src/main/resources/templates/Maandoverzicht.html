@@ -1,51 +1,15 @@
 <!DOCTYPE html>
 <html lang="nl" xmlns:th="http://www.thymeleaf.org">
 <head>
+  <!-- Metadata en stylesheets -->
   <meta charset="UTF-8">
   <title>Maandoverzicht</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="/Style/style.css">
-  <style>
-    main {
-      max-width: 960px;
-      margin: 0 auto;
-      padding: 1rem;
-      box-sizing: border-box;
-    }
-
-    canvas {
-      width: 100% !important;
-      height: auto !important;
-    }
-
-    @media (max-width: 768px) {
-      .grafiek-titel {
-        font-size: 1.5rem;
-        text-align: center;
-      }
-
-      .jaar-selectie-container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-        gap: 0.5rem;
-        padding: 0 1rem;
-      }
-
-      .jaar-selectie {
-        width: 100%;
-        max-width: 300px;
-      }
-
-      select {
-        width: 100%;
-      }
-    }
-  </style>
 </head>
 <body>
 
+<!--Navigatiebalk-->
 <nav class="navigatiebalk">
   <div class="navigatiebalk-logo">
     <a href="/"><img src="/Images/Logo_Aquafin.png" alt="Bedrijfslogo" class="bedrijfslogo"></a>
@@ -58,6 +22,7 @@
 </nav>
 
 <main>
+  <!--Titel en selectie-->
   <div class="grafiek-header">
     <h1 class="grafiek-titel">Neerslag maand juni - <span id="maand-naam"></span> <span id="jaar"></span></h1>
     <div class="jaar-selectie-container">
@@ -77,12 +42,14 @@
     </div>
   </div>
 
+  <!--waarschuwing meldingen-->
   <div class="grafiek-container">
     <canvas id="maandGrafiek" width="900" height="400"></canvas>
     <div id="maand-waarschuwing" class="overstromings-waarschuwingen"></div>
   </div>
 </main>
 
+<!--externe scripts library-->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="/Javascript%20files/Maandoverzicht.js"></script>
 

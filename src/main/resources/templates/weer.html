@@ -1,27 +1,30 @@
 <!DOCTYPE html>
 <html lang="${#locale.language}" xmlns:th="http://www.thymeleaf.org">
 <head>
+
     <meta charset="UTF-8">
     <title>Weer</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/style/style.css">
 </head>
 <body>
+<!--Navigatiebalk-->
 <nav class="navigatiebalk">
     <div class="navigatiebalk-logo">
         <a href="/"><img src="/Images/Logo_Aquafin.png" alt="Bedrijfslogo" class="bedrijfslogo"></a>
     </div>
     <div class="navigatiebalk-rechts">
-        <a href="/weer" class="nav-link nav-knop">Weer voorspelling</a>
-        <a href="/History" class="nav-link nav-knop">Historische grafiek</a>
+        <a href="/History" class="nav-link nav-knop">Historische gegevensgrafiek</a>
         <a href="/Maandoverzicht" class="nav-link nav-knop">Maandoverzicht</a>
         <a href="/Kaart" class="nav-link nav-knop">Neerslagkaart</a>
     </div>
 </nav>
 
+<!--Overstromingsgevaar meldingen van de alle gemeentes in Vlaanderen (alles dat in de grafiek zit)-->
 <h2 class="grafiek-titel">Meldingen overstromingsgevaar</h2>
 <div class="overstromings-waarschuwingen" id="alle-overstromings-waarschuwingen"></div>
 
+<!--Huidig weer container-->
 <div class="huidig-weer-container" id="huidig-weer-container">
     <h2>Huidig weer op jouw locatie</h2>
     <button id="getWeather" class="blauwe-knop">Haal weer op</button>
@@ -33,10 +36,12 @@
     <p id="cached-notice"></p>
 </div>
 
-<h1 class="grafiek-titel">Weervoorspelling voor de komende dagen</h1>
+<!--Weersvoorspelling grafiek-->
+<h1 class="grafiek-titel">Weersvoorspelling voor de komende dagen</h1>
 <div class="jaar-selectie-container">
     <label class="jaar-selectie-label">Kies gemeenten:</label>
     <span id="gemeente-checkboxes">
+        <!--Checkboxen voor gemeenten aan te vinken-->
         <label><input type="checkbox" value="51.2194,4.4025" checked> Antwerpen</label>
         <label><input type="checkbox" value="51.0536,3.7304"> Gent</label>
         <label><input type="checkbox" value="51.2093,3.2247"> Brugge</label>
@@ -54,10 +59,13 @@
     <canvas id="voorspellingGrafiek" width="800" height="400"></canvas>
 </div>
 
+<!--externe scripts library chart.js-->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="/Javascript%20files/weer.js"></script>
 <script src="/Javascript%20files/huidigWeer.js"></script>
 <script>
+    // Flood-risk waarschuwingen ophalen en tonen
+    //We hadden geprobeert om dit te zetten in een aparte javascript file maar dit bracht meer problemen die te veel tijd nam.
     window.addEventListener('DOMContentLoaded', async function() {
         const gemeenten = [
             { naam: "Antwerpen", lat: 51.2194, lon: 4.4025 },
@@ -89,6 +97,7 @@
         waarschuwingenDiv.innerHTML = results.join('');
     });
 </script>
+
 
 <footer style="background-color: #1976d2; color: white; text-align: center; padding: 1rem 0; margin-top: 3rem; font-size: 1rem;">
     Project Groep 5 – SimmeWeerVoorspelling
